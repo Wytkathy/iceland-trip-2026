@@ -151,7 +151,7 @@ function showDay(day) {
 function shareMap() {
     if (navigator.share) {
         navigator.share({
-            title: '冰岛8天7夜详细行程地图',
+            title: 'Xinyì & Yuting的冰岛8天7夜详细行程地图',
             text: '查看我的冰岛旅行计划！2026年2月19-26日',
             url: window.location.href
         }).catch(err => console.log('分享失败:', err));
