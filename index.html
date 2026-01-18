@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冰岛8天7夜详细行程地图 | 2026年2月19-26日</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 100px);
+        }
+        
+        #map {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+        
+        .sidebar {
+            width: 400px;
+            background: white;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .day-section {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .day-section:hover {
+            background: #f8f9fa;
+        }
+        
+        .day-section.active {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .day-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .day-title-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .day-badge {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .day-info {
+            font-size: 13px;
+            color: #666;
+            margin-left: 42px;
+            margin-bottom: 8px;
+        }
+        
+        .day-stats {
+            display: flex;
+            gap: 15px;
+            margin-left: 42px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .intensity-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .intensity-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .intensity-moderate {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .intensity-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* 地图上的信息面板 */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            max-width: 350px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .info-panel.active {
+            display: block;
+        }
+        
+        .info-panel-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .info-panel-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .info-panel-section {
+            margin-bottom: 12px;
+        }
+        
+        .info-panel-section-title {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+        
+        .info-panel-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-panel-list li {
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        
+        .info-panel-list li:before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .timeline-time {
+            color: #667eea;
+            font-weight: bold;
+            min-width: 50px;
+        }
+        
+        .timeline-content {
+            color: #555;
+        }
+        
+        .legend {
+            padding: 15px;
+            background: #fff3cd;
+            border-top: 2px solid #ffc107;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+        
+        .legend-marker {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        /* 自定义弹出窗口 */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            padding: 0;
+            min-width: 250px;
+        }
+        
+        .popup-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .popup-body {
+            padding: 12px;
+            font-size: 12px;
+        }
+        
+        .popup-body p {
+            margin: 6px 0;
+            line-height: 1.5;
+        }
+        
+        .popup-highlight {
+            background: #fff3cd;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #856404;
+        }
+        
+        .close-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .close-panel:hover {
+            background: #5568d3;
+        }
+        
+        /* 路线动画 */
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 280px;
+            }
+            
+            #map {
+                height: calc(100vh - 380px);
+            }
+            
+            .info-panel {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🇮🇸 冰岛8天7夜详细行程地图</h1>
+        <p>2026年2月19日-26日 | 伦敦往返 | 预算¥17,000-19,000</p>
+    </div>
+    
+    <div class="container">
+        <div id="map">
+            <div id="infoPanel" class="info-panel">
+                <button class="close-panel" onclick="closeInfoPanel()">×</button>
+                <div id="infoPanelContent"></div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="day-section" data-day="0">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">📍</span>
+                        <span>行程总览</span>
+                    </div>
+                </div>
+                <div class="day-info">点击查看完整8天路线图</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 总里程：约1,800公里</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="1">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">1</span>
+                        <span>2月19日 周四</span>
+                    </div>
+                    <span class="intensity-badge intensity-easy">轻松</span>
+                </div>
+                <div class="day-info">📍 伦敦 → 雷克雅未克（深夜23:55抵达）</div>
+                <div class="day-stats">
+                    <div class="stat-item">✈️ 飞行3h20m</div>
+                    <div class="stat-item">🚌 交通45分钟</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="2">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">2</span>
+                        <span>2月20日 周五</span>
+                    </div>
+                    <span class="intensity-badge intensity-easy">轻松</span>
+                </div>
+                <div class="day-info">📍 雷克雅未克市区观光</div>
+                <div class="day-stats">
+                    <div class="stat-item">⛪ 4个景点</div>
+                    <div class="stat-item">🛒 超市采购</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="3">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">3</span>
+                        <span>2月21日 周六</span>
+                    </div>
+                    <span class="intensity-badge intensity-moderate">中等</span>
+                </div>
+                <div class="day-info">📍 黄金圈 → 南海岸</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 约300km</div>
+                    <div class="stat-item">⭐ 5大景点</div>
+                    <div class="stat-item">🌌 极光</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="4">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">4</span>
+                        <span>2月22日 周日</span>
+                    </div>
+                    <span class="intensity-badge intensity-hard">高强度</span>
+                </div>
+                <div class="day-info">📍 南海岸 → 冰川徒步</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 约200km</div>
+                    <div class="stat-item">🧊 冰川3小时</div>
+                    <div class="stat-item">🌌 极光</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="5">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">5</span>
+                        <span>2月23日 周一</span>
+                    </div>
+                    <span class="intensity-badge intensity-hard">高强度</span>
+                </div>
+                <div class="day-info">📍 冰河湖 → 雷克雅未克</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 约450km</div>
+                    <div class="stat-item">❄️ 冰洞3小时</div>
+                    <div class="stat-item">⏰ 20:00返回</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="6">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">6</span>
+                        <span>2月24日 周二</span>
+                    </div>
+                    <span class="intensity-badge intensity-moderate">中等</span>
+                </div>
+                <div class="day-info">📍 斯奈山半岛环游</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 约400km</div>
+                    <div class="stat-item">⭐ 7大景点</div>
+                    <div class="stat-item">🗣️ 中文导游</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="7">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">7</span>
+                        <span>2月25日 周三</span>
+                    </div>
+                    <span class="intensity-badge intensity-hard">高强度</span>
+                </div>
+                <div class="day-info">📍 火山徒步 + 蓝湖温泉</div>
+                <div class="day-stats">
+                    <div class="stat-item">📏 约100km</div>
+                    <div class="stat-item">🌋 徒步4小时</div>
+                    <div class="stat-item">♨️ 温泉2.5小时</div>
+                </div>
+            </div>
+            
+            <div class="day-section" data-day="8">
+                <div class="day-title">
+                    <div class="day-title-left">
+                        <span class="day-badge">8</span>
+                        <span>2月26日 周四</span>
+                    </div>
+                    <span class="intensity-badge intensity-easy">轻松</span>
+                </div>
+                <div class="day-info">📍 雷克雅未克 → 伦敦（16:20离境）</div>
+                <div class="day-stats">
+                    <div class="stat-item">🛍️ 3小时购物</div>
+                    <div class="stat-item">✈️ 飞行3h10m</div>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-title">🗺️ 图例说明</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF6B6B;"></div>
+                    <span>Day 3: 黄金圈路线</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4ECDC4;"></div>
+                    <span>Day 4-5: 南海岸路线</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #95E1D3;"></div>
+                    <span>Day 6: 斯奈山半岛</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #F38181;"></div>
+                    <span>Day 7: 火山+蓝湖</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-marker" style="background: #667eea;"></div>
+                    <span>住宿地点</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-marker" style="background: #FFA500;"></div>
+                    <span>景点</span>
+                </div>
+                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 11px; color: #666;">
+                    💡 提示：点击景点标记查看详细信息
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化地图
+        const map = L.map('map', {
+            center: [64.9631, -19.0208],
+            zoom: 7,
+            minZoom: 6,
+            maxZoom: 13
+        });
+        
+        // 添加地图图层
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // 定义所有位置
+        const locations = {
+            reykjavik: [64.1466, -21.9426],
+            keflavik_airport: [63.9850, -22.6056],
+            thingvellir: [64.2558, -21.1292],
+            bruarfoss: [64.2639, -20.5167],
+            geysir: [64.3107, -20.3014],
+            gullfoss: [64.3271, -20.1211],
+            seljalandsfoss: [63.6156, -19.9886],
+            hotel_dranghlid: [63.5333, -19.5167],
+            skogafoss: [63.5319, -19.5114],
+            falljokull: [64.0167, -16.4167],
+            hrifunes: [63.8333, -18.0833],
+            jokulsarlon: [64.0784, -16.2306],
+            diamond_beach: [64.0428, -16.1803],
+            ice_cave: [63.95, -16.9],
+            reynisfjara: [63.4028, -19.0456],
+            ytri_tunga: [64.8611, -23.5000],
+            budir: [64.8194, -23.7889],
+            arnarstapi: [64.7583, -23.6167],
+            djupalonssandur: [64.7458, -23.9361],
+            londrangar: [64.7333, -23.7833],
+            kirkjufell: [64.9439, -23.3125],
+            fagradalsfjall: [63.8833, -22.2667],
+            blue_lagoon: [63.8804, -22.4495]
+        };
+        
+        // 自定义图标
+        const hotelIcon = L.divIcon({
+            className: 'custom-icon',
+            html: '<div style="background: #667eea; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+        
+        const attractionIcon = L.divIcon({
+            className: 'custom-icon',
+            html: '<div style="background: #FFA500; width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+            iconSize: [18, 18],
+            iconAnchor: [9, 9]
+        });
+        
+        const starIcon = L.divIcon({
+            className: 'custom-icon',
+            html: '<div style="background: #FFD700; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px;">⭐</div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+        
+        // 创建图层组
+        let currentLayers = L.layerGroup().addTo(map);
+        
+        // 详细行程信息
+        const dayDetails = {
+            1: {
+                title: "Day 1: 深夜抵达",
+                date: "2月19日 周四",
+                description: "从伦敦飞往雷克雅未克，深夜抵达后入住酒店休息",
+                schedule: [
+                    {time: "20:35", activity: "伦敦希思罗T2起飞（FI455）"},
+                    {time: "23:55", activity: "抵达凯夫拉维克机场"},
+                    {time: "00:30", activity: "入境、提取行李"},
+                    {time: "01:00", activity: "乘Flybus或出租车前往市区"},
+                    {time: "02:00", activity: "办理酒店入住"},
+                    {time: "02:30", activity: "休息睡觉"}
+                ],
+                highlights: [
+                    "建议打出租车（¥990），深夜更安全快捷",
+                    "提前告知酒店深夜02:00入住",
+                    "Flybus车程45分钟，出租车35分钟"
+                ],
+                tips: [
+                    "飞机上尽量睡觉",
+                    "准备少量现金以防万一",
+                    "下载酒店地址离线地图"
+                ]
+            },
+            2: {
+                title: "Day 2: 市区观光休整",
+                date: "2月20日 周五",
+                description: "雷克雅未克市区观光，调整时差，为接下来的行程做准备",
+                schedule: [
+                    {time: "09:00", activity: "哈尔格林姆教堂（登塔¥55）"},
+                    {time: "10:30", activity: "Laugavegur购物街闲逛"},
+                    {time: "12:30", activity: "午餐（推荐热狗摊¥30）"},
+                    {time: "14:00", activity: "老港口+Harpa音乐厅"},
+                    {time: "16:00", activity: "Bonus超市大采购"},
+                    {time: "18:00", activity: "晚餐"},
+                    {time: "21:00", activity: "早睡（明天8点出发）"}
+                ],
+                highlights: [
+                    "教堂登塔俯瞰全城彩色屋顶",
+                    "Bonus超市买接下来3天的零食水",
+                    "充足休息为3日团做准备"
+                ],
+                tips: [
+                    "购物清单：水、面包、火腿、奶酪、能量棒",
+                    "充好所有电子设备",
+                    "整理明天需要的装备"
+                ]
+            },
+            3: {
+                title: "Day 3: 黄金圈经典路线",
+                date: "2月21日 周六",
+                description: "冰岛最经典的黄金圈路线，包含5大必看景点，晚上住南海岸追极光",
+                schedule: [
+                    {time: "08:00", activity: "酒店接送出发"},
+                    {time: "09:30", activity: "辛格韦德利国家公园（1小时）"},
+                    {time: "11:00", activity: "布鲁阿尔瀑布（30分钟）"},
+                    {time: "12:00", activity: "间歇泉区（45分钟）"},
+                    {time: "13:00", activity: "黄金瀑布（45分钟）"},
+                    {time: "15:30", activity: "塞里雅兰瀑布（45分钟）"},
+                    {time: "傍晚", activity: "入住南海岸酒店"},
+                    {time: "晚上", activity: "追极光（第一晚机会）"}
+                ],
+                highlights: [
+                    "辛格韦德利：两大板块交界处，世界遗产",
+                    "间歇泉：每5-10分钟喷发一次，高达35米",
+                    "黄金瀑布：双层瀑布，可见彩虹",
+                    "塞里雅兰：可走到瀑布后面（会湿身）",
+                    "夜晚追极光：远离光污染的乡村酒店"
+                ],
+                tips: [
+                    "塞里雅兰瀑布必备防水雨衣",
+                    "自备午餐或途中购买",
+                    "相机带三脚架（拍极光）",
+                    "保持电量充足"
+                ],
+                distance: "约300公里",
+                accommodation: "Hotel Drangshlíð（南海岸）",
+                meals: "含早餐，午晚餐自理"
+            },
+            4: {
+                title: "Day 4: 冰川徒步探险",
+                date: "2月22日 周日",
+                description: "今天的重头戏是在Falljökull冰川上徒步2-3小时，高强度活动",
+                schedule: [
+                    {time: "07:00", activity: "酒店早餐（吃饱！）"},
+                    {time: "08:30", activity: "斯科加瀑布（45分钟）"},
+                    {time: "10:00", activity: "⭐冰川徒步准备（穿装备）"},
+                    {time: "10:30", activity: "⭐冰川徒步（2-3小时）"},
+                    {time: "13:30", activity: "午餐休息"},
+                    {time: "下午", activity: "前往东部酒店"},
+                    {time: "晚上", activity: "追极光（第二晚机会）"}
+                ],
+                highlights: [
+                    "斯科加瀑布：60米高，可爬430级台阶到顶",
+                    "⭐冰川徒步：穿冰爪在冰川上行走",
+                    "探索冰缝、冰洞，欣赏蓝冰世界",
+                    "专业导游讲解冰川知识",
+                    "所有装备提供：冰爪、头盔、冰镐"
+                ],
+                tips: [
+                    "❗必须穿防水徒步鞋（有脚踝支撑）",
+                    "穿多层衣服，便于增减",
+                    "带手套保护双手",
+                    "戴墨镜防止雪盲",
+                    "听从导游指挥，注意安全"
+                ],
+                distance: "约200公里",
+                accommodation: "Hrífunes Inn（南海岸东部）",
+                meals: "含早餐，午晚餐自理",
+                intensity: "高强度（冰川徒步2-3小时）"
+            },
+            5: {
+                title: "Day 5: 冰河湖与蓝冰洞",
+                date: "2月23日 周一",
+                description: "今天到达行程最远点-冰河湖，探索蓝冰洞，下午返回雷克雅未克",
+                schedule: [
+                    {time: "07:00", activity: "酒店早餐"},
+                    {time: "09:00", activity: "杰古沙龙冰河湖（1小时）"},
+                    {time: "10:15", activity: "钻石海滩（30分钟）"},
+                    {time: "11:00", activity: "⭐蓝冰洞探险（2-3小时）"},
+                    {time: "14:00", activity: "午餐"},
+                    {time: "15:30", activity: "雷尼斯黑沙滩（45分钟）"},
+                    {time: "返程", activity: "返回雷克雅未克"},
+                    {time: "20:00", activity: "到达市区酒店"}
+                ],
+                highlights: [
+                    "冰河湖：巨大冰山漂浮，可能看到海豹",
+                    "钻石海滩：冰块如钻石般闪耀在黑沙滩上",
+                    "⭐蓝冰洞：进入冰川内部，震撼蓝色冰墙",
+                    "黑沙滩：玄武岩柱，海中岩柱",
+                    "Super Jeep前往冰洞（刺激体验）"
+                ],
+                tips: [
+                    "❗黑沙滩危险海浪，绝不背对大海",
+                    "冰洞内更冷，多穿衣服",
+                    "相机做好防水保护",
+                    "今天返回较晚，晚餐自理"
+                ],
+                distance: "约450公里（全天最长）",
+                accommodation: "雷克雅未克市区酒店",
+                meals: "含早餐，午晚餐自理",
+                intensity: "高强度（长途+冰洞探险）"
+            },
+            6: {
+                title: "Day 6: 斯奈山半岛环游",
+                date: "2月24日 周二",
+                description: "被称为'冰岛缩影'的斯奈山半岛，中文导游全程讲解，轻松舒适",
+                schedule: [
+                    {time: "08:00", activity: "酒店接送（中文导游）"},
+                    {time: "10:00", activity: "博尔加内斯休息站"},
+                    {time: "11:00", activity: "Ytri-Tunga观海豹"},
+                    {time: "12:15", activity: "Búðir黑教堂"},
+                    {time: "13:00", activity: "Arnarstapi渔村"},
+                    {time: "14:00", activity: "午餐（自费）"},
+                    {time: "15:15", activity: "Djúpalónssandur黑沙滩"},
+                    {time: "16:15", activity: "Lóndrangar玄武岩柱"},
+                    {time: "17:00", activity: "Ingjaldshóll教堂"},
+                    {time: "17:30", activity: "⭐教会山（1小时）"},
+                    {time: "20:00", activity: "返回雷克雅未克"}
+                ],
+                highlights: [
+                    "野生海豹栖息地（远距离观察）",
+                    "标志性黑教堂（网红打卡点）",
+                    "天然石拱门与海岸悬崖",
+                    "1948年沉船遗迹+古代举重石",
+                    "⭐教会山：冰岛最上镜地标，《权游》取景地"
+                ],
+                tips: [
+                    "海边风大，注意保暖",
+                    "教会山是摄影重点，多留时间",
+                    "最佳拍摄时间：下午3-4点",
+                    "午餐自费，建议自备或途中购买",
+                    "中文导游沟通无障碍"
+                ],
+                distance: "约400公里",
+                accommodation: "雷克雅未克市区酒店",
+                meals: "早晚餐自理，午餐自费",
+                tour: "Troll中文导游团，12小时"
+            },
+            7: {
+                title: "Day 7: 火山徒步+蓝湖温泉",
+                date: "2月25日 周三",
+                description: "先徒步火山熔岩地（高强度），然后在蓝湖温泉放松恢复，完美组合",
+                schedule: [
+                    {time: "06:30", activity: "起床，吃饱早餐（重要！）"},
+                    {time: "08:00", activity: "酒店接送"},
+                    {time: "09:00", activity: "Lake Kleifarvatn"},
+                    {time: "10:00", activity: "⭐火山徒步（往返4小时）"},
+                    {time: "14:00", activity: "午餐"},
+                    {time: "14:30", activity: "⭐蓝湖温泉（2.5小时）"},
+                    {time: "17:00", activity: "返回市区"},
+                    {time: "18:00", activity: "到达酒店"},
+                    {time: "晚上", activity: "❗必须打包行李（明天离境）"}
+                ],
+                highlights: [
+                    "⭐活火山徒步：2021-2023年喷发遗址",
+                    "崎岖熔岩地形，震撼地貌",
+                    "往返最多4小时，体力挑战",
+                    "⭐蓝湖温泉：地热矿物质温泉",
+                    "免费硅泥面膜+首杯饮品",
+                    "完美放松舒缓徒步疲劳"
+                ],
+                tips: [
+                    "❗❗❗严格装备要求：",
+                    "✓ 防水冲锋衣（必须）",
+                    "✓ 防水裤（❌禁穿牛仔裤！失温危险！）",
+                    "✓ 防水徒步鞋（脚踝支撑）",
+                    "✓ 登山杖（强烈建议租）",
+                    "✓ 水1L+高热量零食",
+                    "✓ 泳衣（蓝湖用）",
+                    "今晚必须打包行李！"
+                ],
+                distance: "约100公里",
+                accommodation: "雷克雅未克市区酒店",
+                meals: "早晚餐自理",
+                intensity: "高强度（徒步4小时）",
+                price: "¥1,326（用优惠码NY20）"
+            },
+            8: {
+                title: "Day 8: 购物离境",
+                date: "2月26日 周四",
+                description: "上午3小时自由活动购物，下午16:20飞回伦敦",
+                schedule: [
+                    {time: "08:30", activity: "酒店早餐"},
+                    {time: "09:30", activity: "最后购物（3小时）"},
+                    {time: "12:30", activity: "返回酒店，最后检查"},
+                    {time: "13:00", activity: "出发去机场（Flybus/出租车）"},
+                    {time: "13:45", activity: "到达机场"},
+                    {time: "14:00", activity: "办理登机、托运"},
+                    {time: "14:30", activity: "退税（如有）"},
+                    {time: "15:00", activity: "安检"},
+                    {time: "15:30", activity: "免税店+候机"},
+                    {time: "16:20", activity: "✈️ FI454起飞"},
+                    {time: "19:30", activity: "抵达伦敦希思罗T2"}
+                ],
+                highlights: [
+                    "Laugavegur主街最后购物",
+                    "补漏的冰岛纪念品",
+                    "机场免税店（巧克力、酒更便宜）",
+                    "退税领钱（如购物超ISK 6,000）",
+                    "充裕时间不赶"
+                ],
+                tips: [
+                    "前一晚必须打包好行李",
+                    "退房前检查所有角落（充电器！）",
+                    "保留一些ISK作纪念",
+                    "提前2.5小时到机场",
+                    "托运行李注意限重"
+                ]
+            }
+        };
+        
+        // 显示信息面板
+        function showInfoPanel(day) {
+            const details = dayDetails[day];
+            if (!details) return;
+            
+            let scheduleHTML = details.schedule.map(item => 
+                `<div class="timeline-item">
+                    <div class="timeline-time">${item.time}</div>
+                    <div class="timeline-content">${item.activity}</div>
+                </div>`
+            ).join('');
+            
+            let highlightsHTML = details.highlights ? 
+                `<div class="info-panel-section">
+                    <div class="info-panel-section-title">✨ 行程亮点</div>
+                    <ul class="info-panel-list">
+                        ${details.highlights.map(h => `<li>${h}</li>`).join('')}
+                    </ul>
+                </div>` : '';
+            
+            let tipsHTML = details.tips ? 
+                `<div class="info-panel-section">
+                    <div class="info-panel-section-title">💡 注意事项</div>
+                    <ul class="info-panel-list">
+                        ${details.tips.map(t => `<li>${t}</li>`).join('')}
+                    </ul>
+                </div>` : '';
+            
+            let extraInfo = '';
+            if (details.distance) extraInfo += `<p><strong>📏 里程：</strong>${details.distance}</p>`;
+            if (details.accommodation) extraInfo += `<p><strong>🏨 住宿：</strong>${details.accommodation}</p>`;
+            if (details.meals) extraInfo += `<p><strong>🍽️ 餐食：</strong>${details.meals}</p>`;
+            if (details.intensity) extraInfo += `<p><strong>💪 强度：</strong>${details.intensity}</p>`;
+            if (details.tour) extraInfo += `<p><strong>👥 旅行团：</strong>${details.tour}</p>`;
+            if (details.price) extraInfo += `<p><strong>💰 价格：</strong>${details.price}</p>`;
+            
+            document.getElementById('infoPanelContent').innerHTML = `
+                <div class="info-panel-header">${details.title}</div>
+                <div class="info-panel-content">
+                    <div class="info-panel-section">
+                        <div class="info-panel-section-title">📅 ${details.date}</div>
+                        <p>${details.description}</p>
+                        ${extraInfo}
+                    </div>
+                    <div class="info-panel-section">
+                        <div class="info-panel-section-title">⏰ 时间安排</div>
+                        ${scheduleHTML}
+                    </div>
+                    ${highlightsHTML}
+                    ${tipsHTML}
+                </div>
+            `;
+            
+            document.getElementById('infoPanel').classList.add('active');
+        }
+        
+        function closeInfoPanel() {
+            document.getElementById('infoPanel').classList.remove('active');
+        }
+        
+        // 定义每日行程（包含路线和标记）
+        const itineraries = {
+            0: { // 总览
+                routes: [
+                    {coords: [locations.reykjavik, locations.thingvellir, locations.bruarfoss, locations.geysir, locations.gullfoss, locations.seljalandsfoss, locations.hotel_dranghlid], color: '#FF6B6B', weight: 3},
+                    {coords: [locations.hotel_dranghlid, locations.skogafoss, locations.falljokull, locations.hrifunes, locations.jokulsarlon, locations.diamond_beach, locations.reynisfjara, locations.reykjavik], color: '#4ECDC4', weight: 3},
+                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#95E1D3', weight: 3},
+                    {coords: [locations.reykjavik, locations.fagradalsfjall, locations.blue_lagoon, locations.reykjavik], color: '#F38181', weight: 3}
+                ],
+                markers: [],
+                onShow: () => closeInfoPanel()
+            },
+            1: {
+                routes: [
+                    {coords: [locations.keflavik_airport, locations.reykjavik], color: '#667eea', weight: 4, dash: '10, 10'}
+                ],
+                markers: [
+                    {pos: locations.keflavik_airport, icon: attractionIcon, popup: '<div class="popup-header">✈️ 凯夫拉维克机场</div><div class="popup-body"><p><strong>⏰ 到达：</strong>23:55</p><p><strong>🚌 前往市区：</strong>Flybus 45分钟 或 出租车35分钟</p><p><strong>💰 交通：</strong>¥270（Flybus）或 ¥990（出租车，推荐）</p><div class="popup-highlight">💡 深夜建议打出租车，更安全快捷</div></div>'},
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏨 雷克雅未克</div><div class="popup-body"><p><strong>⏰ 入住：</strong>约02:00</p><p><strong>💤 休息：</strong>早点睡觉</p><div class="popup-highlight">⚠️ 提前告知酒店深夜入住时间</div></div>'}
+                ],
+                onShow: () => showInfoPanel(1)
+            },
+            2: {
+                routes: [],
+                markers: [
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏙️ 雷克雅未克市区观光</div><div class="popup-body"><p><strong>⛪ 哈尔格林姆教堂</strong><br/>登塔¥55，俯瞰全城</p><p><strong>🛍️ Laugavegur购物街</strong><br/>咖啡馆、纪念品</p><p><strong>🌊 老港口</strong><br/>Harpa音乐厅</p><p><strong>🛒 Bonus超市</strong><br/>采购3天零食水</p><div class="popup-highlight">💡 今晚早睡，明天8:00出发3日团</div></div>'}
+                ],
+                onShow: () => showInfoPanel(2)
+            },
+            3: {
+                routes: [
+                    {coords: [locations.reykjavik, locations.thingvellir, locations.bruarfoss, locations.geysir, locations.gullfoss, locations.seljalandsfoss, locations.hotel_dranghlid], color: '#FF6B6B', weight: 4}
+                ],
+                markers: [
+                    {pos: locations.thingvellir, icon: attractionIcon, popup: '<div class="popup-header">🌍 辛格韦德利国家公园</div><div class="popup-body"><p><strong>亮点：</strong>世界遗产，两大板块交界</p><p><strong>时间：</strong>09:30-10:30（1小时）</p><p><strong>活动：</strong>步道徒步，观看板块裂缝</p></div>'},
+                    {pos: locations.bruarfoss, icon: attractionIcon, popup: '<div class="popup-header">💙 布鲁阿尔瀑布</div><div class="popup-body"><p><strong>亮点：</strong>冰岛最蓝的瀑布</p><p><strong>时间：</strong>11:00-11:30（30分钟）</p><p><strong>特色：</strong>宝石蓝色水流</p></div>'},
+                    {pos: locations.geysir, icon: attractionIcon, popup: '<div class="popup-header">💨 间歇泉区</div><div class="popup-body"><p><strong>亮点：</strong>Strokkur间歇泉</p><p><strong>时间：</strong>12:00-12:45（45分钟）</p><p><strong>喷发：</strong>每5-10分钟，高达35米</p><div class="popup-highlight">📸 拍照时注意安全距离</div></div>'},
+                    {pos: locations.gullfoss, icon: starIcon, popup: '<div class="popup-header">⭐ 黄金瀑布</div><div class="popup-body"><p><strong>亮点：</strong>双层瀑布，震撼壮观</p><p><strong>时间：</strong>13:00-14:00（1小时）</p><p><strong>特色：</strong>阳光下可见彩虹</p><p><strong>落差：</strong>11米+21米</p></div>'},
+                    {pos: locations.seljalandsfoss, icon: starIcon, popup: '<div class="popup-header">⭐ 塞里雅兰瀑布</div><div class="popup-body"><p><strong>亮点：</strong>可走到瀑布后面</p><p><strong>时间：</strong>15:30-16:30（1小时）</p><p><strong>特色：</strong>独特拍摄角度</p><div class="popup-highlight">⚠️ 必备防水雨衣，会全身湿透</div></div>'},
+                    {pos: locations.hotel_dranghlid, icon: hotelIcon, popup: '<div class="popup-header">🏨 南海岸酒店</div><div class="popup-body"><p><strong>酒店：</strong>Hotel Drangshlíð</p><p><strong>位置：</strong>南海岸乡村</p><p><strong>晚餐：</strong>部分包含或自费</p><p><strong>晚上：</strong>🌌 追极光（第一晚）</p><div class="popup-highlight">💡 远离光污染，极光观测绝佳地</div></div>'}
+                ],
+                onShow: () => showInfoPanel(3)
+            },
+            4: {
+                routes: [
+                    {coords: [locations.hotel_dranghlid, locations.skogafoss, locations.falljokull, locations.hrifunes], color: '#4ECDC4', weight: 4}
+                ],
+                markers: [
+                    {pos: locations.skogafoss, icon: attractionIcon, popup: '<div class="popup-header">💦 斯科加瀑布</div><div class="popup-body"><p><strong>高度：</strong>60米</p><p><strong>时间：</strong>08:30-09:30（1小时）</p><p><strong>特色：</strong>可爬430级台阶到顶</p><p><strong>拍摄：</strong>常见彩虹</p></div>'},
+                    {pos: locations.falljokull, icon: starIcon, popup: '<div class="popup-header">⭐🧊 冰川徒步（核心活动）</div><div class="popup-body"><p><strong>冰川：</strong>Falljökull</p><p><strong>时长：</strong>2-3小时</p><p><strong>装备：</strong>冰爪、头盔、冰镐（提供）</p><p><strong>活动：</strong>冰川行走、探索冰缝</p><div class="popup-highlight">⚠️ 必须穿防水徒步鞋（脚踝支撑）<br/>❄️ 体验蓝冰世界，专业导游讲解</div></div>'},
+                    {pos: locations.hrifunes, icon: hotelIcon, popup: '<div class="popup-header">🏨 南海岸东部酒店</div><div class="popup-body"><p><strong>酒店：</strong>Hrífunes Inn</p><p><strong>位置：</strong>南海岸东部</p><p><strong>晚上：</strong>🌌 追极光（第二晚）</p><div class="popup-highlight">💡 今天冰川徒步很累，早点休息</div></div>'}
+                ],
+                onShow: () => showInfoPanel(4)
+            },
+            5: {
+                routes: [
+                    {coords: [locations.hrifunes, locations.jokulsarlon, locations.diamond_beach, locations.reynisfjara, locations.reykjavik], color: '#4ECDC4', weight: 4}
+                ],
+                markers: [
+                    {pos: locations.jokulsarlon, icon: starIcon, popup: '<div class="popup-header">⭐🧊 杰古沙龙冰河湖</div><div class="popup-body"><p><strong>特色：</strong>欧洲最大冰河湖</p><p><strong>时间：</strong>09:00-10:00（1小时）</p><p><strong>景观：</strong>巨大冰山漂浮</p><p><strong>野生动物：</strong>可能看到海豹</p><div class="popup-highlight">📸 摄影天堂，绝美景色</div></div>'},
+                    {pos: locations.diamond_beach, icon: attractionIcon, popup: '<div class="popup-header">💎 钻石海滩</div><div class="popup-body"><p><strong>特色：</strong>冰块如钻石</p><p><strong>时间：</strong>10:15-10:45（30分钟）</p><p><strong>景观：</strong>冰块散落黑沙滩</p><p><strong>拍摄：</strong>阳光下闪闪发光</p></div>'},
+                    {pos: locations.ice_cave, icon: starIcon, popup: '<div class="popup-header">⭐❄️ 蓝冰洞（核心活动）</div><div class="popup-body"><p><strong>冰川：</strong>Vatnajökull内部</p><p><strong>时长：</strong>2-3小时</p><p><strong>交通：</strong>Super Jeep前往</p><p><strong>装备：</strong>头盔、冰爪（提供）</p><p><strong>景观：</strong>震撼蓝色冰墙</p><div class="popup-highlight">❄️ 冬季限定（10-3月）<br/>💙 进入冰川内部，水晶般的蓝冰</div></div>'},
+                    {pos: locations.reynisfjara, icon: attractionIcon, popup: '<div class="popup-header">🖤 雷尼斯黑沙滩</div><div class="popup-body"><p><strong>特色：</strong>黑色火山沙</p><p><strong>时间：</strong>15:30-16:30（1小时）</p><p><strong>景观：</strong>六角玄武岩柱、海中岩柱</p><div class="popup-highlight">⚠️ 危险！Sneaker waves（偷袭浪）<br/>❌ 绝对不能背对大海</div></div>'},
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏨 返回雷克雅未克</div><div class="popup-body"><p><strong>到达时间：</strong>约20:00</p><p><strong>住宿：</strong>市区酒店</p><p><strong>晚餐：</strong>自理</p><div class="popup-highlight">💡 今天行程最长，晚餐建议外卖或超市</div></div>'}
+                ],
+                onShow: () => showInfoPanel(5)
+            },
+            6: {
+                routes: [
+                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#95E1D3', weight: 4}
+                ],
+                markers: [
+                    {pos: locations.ytri_tunga, icon: attractionIcon, popup: '<div class="popup-header">🦭 Ytri-Tunga海滩</div><div class="popup-body"><p><strong>特色：</strong>野生海豹栖息地</p><p><strong>时间：</strong>11:00-11:45（45分钟）</p><p><strong>观察：</strong>远距离观看海豹</p><div class="popup-highlight">⚠️ 不要靠近打扰海豹</div></div>'},
+                    {pos: locations.budir, icon: attractionIcon, popup: '<div class="popup-header">⛪ Búðir黑教堂</div><div class="popup-body"><p><strong>特色：</strong>标志性黑色木教堂</p><p><strong>时间：</strong>12:15-12:45（30分钟）</p><p><strong>背景：</strong>熔岩地和雪山</p><p><strong>拍摄：</strong>网红打卡点</p></div>'},
+                    {pos: locations.arnarstapi, icon: attractionIcon, popup: '<div class="popup-header">🌊 Arnarstapi渔村</div><div class="popup-body"><p><strong>特色：</strong>天然石拱门</p><p><strong>时间：</strong>13:00-14:00（1小时）</p><p><strong>活动：</strong>海岸步道徒步</p><p><strong>景观：</strong>壮观悬崖，海浪拍岸</p></div>'},
+                    {pos: locations.djupalonssandur, icon: attractionIcon, popup: '<div class="popup-header">🖤 Djúpalónssandur</div><div class="popup-body"><p><strong>特色：</strong>黑色卵石海滩</p><p><strong>时间：</strong>15:15-16:00（45分钟）</p><p><strong>历史：</strong>1948年沉船遗迹</p><p><strong>文化：</strong>古代举重石（测试渔民力量）</p></div>'},
+                    {pos: locations.londrangar, icon: attractionIcon, popup: '<div class="popup-header">🗿 Lóndrangar玄武岩柱</div><div class="popup-body"><p><strong>特色：</strong>75米高玄武岩塞</p><p><strong>时间：</strong>16:15-16:45（30分钟）</p><p><strong>地质：</strong>古火山口遗迹</p><p><strong>野生动物：</strong>海鸟栖息地</p></div>'},
+                    {pos: locations.kirkjufell, icon: starIcon, popup: '<div class="popup-header">⭐🏔️ 教会山（最上镜地标）</div><div class="popup-body"><p><strong>特色：</strong>冰岛地标，最上镜</p><p><strong>时间：</strong>17:30-18:30（1小时）</p><p><strong>著名：</strong>《权力的游戏》取景地</p><p><strong>构图：</strong>瀑布+教会山经典组合</p><div class="popup-highlight">📸 最佳拍摄：下午3-4点（日落前）<br/>💡 多留时间拍照</div></div>'},
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏨 返回雷克雅未克</div><div class="popup-body"><p><strong>到达：</strong>约20:00</p><p><strong>导游：</strong>🗣️ 中文全程讲解</p><p><strong>时长：</strong>12小时</p><div class="popup-highlight">💡 沟通无障碍，体验更佳</div></div>'}
+                ],
+                onShow: () => showInfoPanel(6)
+            },
+            7: {
+                routes: [
+                    {coords: [locations.reykjavik, locations.fagradalsfjall, locations.blue_lagoon, locations.reykjavik], color: '#F38181', weight: 4}
+                ],
+                markers: [
+                    {pos: locations.fagradalsfjall, icon: starIcon, popup: '<div class="popup-header">⭐🌋 活火山徒步（核心活动）</div><div class="popup-body"><p><strong>火山：</strong>Fagradalsfjall区域</p><p><strong>时长：</strong>往返最多4小时</p><p><strong>地形：</strong>崎岖熔岩地，有坡度</p><p><strong>难度：</strong>中等（需合理体能）</p><p><strong>景观：</strong>2021-2023喷发遗址</p><div class="popup-highlight">❗❗❗严格装备要求：<br/>✓ 防水裤（❌禁穿牛仔裤！）<br/>✓ 防水徒步鞋<br/>✓ 登山杖<br/>✓ 水1L+零食</div></div>'},
+                    {pos: locations.blue_lagoon, icon: starIcon, popup: '<div class="popup-header">⭐♨️ 蓝湖温泉（核心活动）</div><div class="popup-body"><p><strong>特色：</strong>地热矿物质温泉</p><p><strong>时长：</strong>2.5小时</p><p><strong>套餐：</strong>Comfort（包含）</p><p><strong>包含：</strong>毛巾、硅泥面膜、首杯饮品</p><p><strong>水温：</strong>37-40°C</p><div class="popup-highlight">♨️ 完美放松舒缓徒步疲劳<br/>💙 乳蓝色泉水，对皮肤好<br/>✓ 需自备泳衣</div></div>'},
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏨 返回雷克雅未克</div><div class="popup-body"><p><strong>到达：</strong>约18:00</p><p><strong>今晚任务：</strong>❗打包行李</p><p><strong>明天：</strong>16:20离境</p><div class="popup-highlight">⚠️ 必须今晚打包好所有行李！<br/>💡 检查护照、机票、贵重物品</div></div>'}
+                ],
+                onShow: () => showInfoPanel(7)
+            },
+            8: {
+                routes: [
+                    {coords: [locations.reykjavik, locations.keflavik_airport], color: '#667eea', weight: 4, dash: '10, 10'}
+                ],
+                markers: [
+                    {pos: locations.reykjavik, icon: hotelIcon, popup: '<div class="popup-header">🏨 雷克雅未克</div><div class="popup-body"><p><strong>上午：</strong>🛍️ 3小时自由购物</p><p><strong>12:30：</strong>返回酒店</p><p><strong>13:00：</strong>出发机场</p><div class="popup-highlight">💡 最后购物机会<br/>⚠️ 退房前检查所有物品</div></div>'},
+                    {pos: locations.keflavik_airport, icon: attractionIcon, popup: '<div class="popup-header">✈️ 凯夫拉维克机场</div><div class="popup-body"><p><strong>到达：</strong>13:45</p><p><strong>起飞：</strong>16:20（FI454）</p><p><strong>抵达伦敦：</strong>19:30</p><p><strong>免税店：</strong>巧克力、酒更便宜</p><div class="popup-highlight">💰 退税：购物超ISK 6,000可退税<br/>⏰ 提前2.5小时到机场</div></div>'}
+                ],
+                onShow: () => showInfoPanel(8)
+            }
+        };
+        
+        // 显示特定天数的路线
+        function showDay(day) {
+            currentLayers.clearLayers();
+            
+            const itinerary = itineraries[day];
+            
+            // 绘制路线
+            itinerary.routes.forEach(route => {
+                const polyline = L.polyline(route.coords, {
+                    color: route.color,
+                    weight: route.weight,
+                    opacity: 0.8,
+                    dashArray: route.dash || null
+                });
+                currentLayers.addLayer(polyline);
+            });
+            
+            // 添加标记
+            itinerary.markers.forEach(marker => {
+                const m = L.marker(marker.pos, {icon: marker.icon})
+                    .bindPopup(marker.popup, {maxWidth: 300});
+                currentLayers.addLayer(m);
+            });
+            
+            // 自动调整视图
+            if (itinerary.routes.length > 0) {
+                const allCoords = itinerary.routes.flatMap(r => r.coords);
+                if (allCoords.length > 0) {
+                    map.fitBounds(L.latLngBounds(allCoords), {padding: [50, 50]});
+                }
+            } else if (itinerary.markers.length > 0) {
+                const markerCoords = itinerary.markers.map(m => m.pos);
+                map.fitBounds(L.latLngBounds(markerCoords), {padding: [50, 50]});
+            }
+            
+            // 更新侧边栏
+            document.querySelectorAll('.day-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelector(`[data-day="${day}"]`).classList.add('active');
+            
+            // 显示信息面板
+            if (itinerary.onShow) {
+                itinerary.onShow();
+            }
+        }
+        
+        // 侧边栏点击事件
+        document.querySelectorAll('.day-section').forEach(section => {
+            section.addEventListener('click', function() {
+                const day = parseInt(this.getAttribute('data-day'));
+                showDay(day);
+            });
+        });
+        
+        // 默认显示Day 3（黄金圈）
+        showDay(3);
+    </script>
+</body>
+</html>
