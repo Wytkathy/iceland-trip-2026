@@ -1360,13 +1360,8 @@
 
         // ==================== 每日行程 ====================
         const itineraries = {
-            0: { // 总览
-                routes: [
-                    {coords: [locations.reykjavik, locations.thingvellir, locations.bruarfoss, locations.geysir, locations.gullfoss, locations.seljalandsfoss, locations.hotel_dranghlid], color: '#FF6B6B', weight: 4},
-                    {coords: [locations.hotel_dranghlid, locations.skogafoss, locations.falljokull, locations.hrifunes, locations.jokulsarlon, locations.diamond_beach, locations.reynisfjara, locations.reykjavik], color: '#4ECDC4', weight: 4},
-                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#45B7AF', weight: 4},
-                    {coords: [locations.reykjavik, locations.fagradalsfjall, locations.blue_lagoon, locations.reykjavik], color: '#F38181', weight: 4}
-                ],
+            0: { // 总览 - 只显示地标，不显示路线
+                routes: [],
                 markers: [],
                 onShow: () => closeInfoPanel()
             },
@@ -1549,15 +1544,16 @@
 
             // 平滑过渡到视图范围
             const padding = day === 0 ? [30, 30] : [50, 50];
-            if (itinerary.routes.length > 0) {
-                const allCoords = itinerary.routes.flatMap(r => r.coords);
-                if (day === 0) {
-                    Object.keys(locationDayMap).forEach(key => {
-                        allCoords.push(locations[key]);
-                    });
-                }
+            if (day === 0) {
+                // 总览模式：从 locationDayMap 计算所有地点的边界
+                const allCoords = Object.keys(locationDayMap).map(key => locations[key]);
                 if (allCoords.length > 0) {
-                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: day === 0 ? 8 : 11});
+                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: 8});
+                }
+            } else if (itinerary.routes.length > 0) {
+                const allCoords = itinerary.routes.flatMap(r => r.coords);
+                if (allCoords.length > 0) {
+                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: 11});
                 }
             } else if (itinerary.markers.length > 0) {
                 const markerCoords = itinerary.markers.map(m => m.pos);
