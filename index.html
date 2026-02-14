@@ -11,12 +11,12 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
             background: #f5f5f5;
         }
-        
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -24,51 +24,51 @@
             text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .header h1 {
             font-size: 28px;
             margin-bottom: 5px;
         }
-        
+
         .header p {
             font-size: 14px;
             opacity: 0.9;
         }
-        
+
         .container {
             display: flex;
             height: calc(100vh - 100px);
         }
-        
+
         #map {
             flex: 1;
             height: 100%;
             position: relative;
         }
-        
+
         .sidebar {
             width: 400px;
             background: white;
             overflow-y: auto;
             box-shadow: -2px 0 10px rgba(0,0,0,0.1);
         }
-        
+
         .day-section {
             padding: 15px;
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background 0.3s;
         }
-        
+
         .day-section:hover {
             background: #f8f9fa;
         }
-        
+
         .day-section.active {
             background: #e3f2fd;
             border-left: 4px solid #2196F3;
         }
-        
+
         .day-title {
             font-size: 16px;
             font-weight: bold;
@@ -78,12 +78,12 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .day-title-left {
             display: flex;
             align-items: center;
         }
-        
+
         .day-badge {
             display: inline-block;
             width: 32px;
@@ -97,14 +97,14 @@
             font-size: 14px;
             font-weight: bold;
         }
-        
+
         .day-info {
             font-size: 13px;
             color: #666;
             margin-left: 42px;
             margin-bottom: 8px;
         }
-        
+
         .day-stats {
             display: flex;
             gap: 15px;
@@ -112,14 +112,15 @@
             margin-top: 8px;
             font-size: 12px;
             color: #888;
+            flex-wrap: wrap;
         }
-        
+
         .stat-item {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        
+
         .intensity-badge {
             display: inline-block;
             padding: 3px 10px;
@@ -127,22 +128,22 @@
             font-size: 11px;
             font-weight: 600;
         }
-        
+
         .intensity-easy {
             background: #d4edda;
             color: #155724;
         }
-        
+
         .intensity-moderate {
             background: #fff3cd;
             color: #856404;
         }
-        
+
         .intensity-hard {
             background: #f8d7da;
             color: #721c24;
         }
-        
+
         /* 地图上的信息面板 */
         .info-panel {
             position: absolute;
@@ -150,17 +151,25 @@
             left: 20px;
             background: white;
             padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            max-width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-width: 380px;
+            max-height: 70vh;
+            overflow-y: auto;
             z-index: 1000;
             display: none;
         }
-        
+
         .info-panel.active {
             display: block;
+            animation: slideUp 0.3s ease;
         }
-        
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .info-panel-header {
             font-size: 16px;
             font-weight: bold;
@@ -169,101 +178,101 @@
             padding-bottom: 8px;
             border-bottom: 2px solid #667eea;
         }
-        
+
         .info-panel-content {
             font-size: 13px;
             color: #666;
             line-height: 1.6;
         }
-        
+
         .info-panel-section {
             margin-bottom: 12px;
         }
-        
+
         .info-panel-section-title {
             font-weight: bold;
             color: #444;
             margin-bottom: 5px;
             font-size: 13px;
         }
-        
+
         .info-panel-list {
             list-style: none;
             padding: 0;
         }
-        
+
         .info-panel-list li {
             padding: 4px 0;
             padding-left: 18px;
             position: relative;
         }
-        
+
         .info-panel-list li:before {
-            content: "•";
+            content: "\2022";
             position: absolute;
             left: 5px;
             color: #667eea;
             font-weight: bold;
         }
-        
+
         .timeline-item {
             display: flex;
             gap: 10px;
             margin-bottom: 8px;
             font-size: 12px;
         }
-        
+
         .timeline-time {
             color: #667eea;
             font-weight: bold;
             min-width: 50px;
         }
-        
+
         .timeline-content {
             color: #555;
         }
-        
+
         .legend {
             padding: 15px;
             background: #fff3cd;
             border-top: 2px solid #ffc107;
         }
-        
+
         .legend-title {
             font-weight: bold;
             margin-bottom: 10px;
             color: #333;
             font-size: 14px;
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             margin-bottom: 8px;
             font-size: 12px;
         }
-        
+
         .legend-color {
             width: 20px;
             height: 3px;
             margin-right: 10px;
             border-radius: 2px;
         }
-        
+
         .legend-marker {
             width: 14px;
             height: 14px;
             border-radius: 50%;
             margin-right: 10px;
         }
-        
+
         /* 自定义弹出窗口 */
         .leaflet-popup-content-wrapper {
             border-radius: 8px;
             padding: 0;
             min-width: 250px;
         }
-        
+
         .popup-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -272,17 +281,17 @@
             font-weight: bold;
             font-size: 14px;
         }
-        
+
         .popup-body {
             padding: 12px;
             font-size: 12px;
         }
-        
+
         .popup-body p {
             margin: 6px 0;
             line-height: 1.5;
         }
-        
+
         .popup-highlight {
             background: #fff3cd;
             padding: 8px;
@@ -291,7 +300,7 @@
             font-size: 11px;
             color: #856404;
         }
-        
+
         .close-panel {
             position: absolute;
             top: 10px;
@@ -305,34 +314,204 @@
             cursor: pointer;
             font-size: 16px;
             line-height: 1;
+            z-index: 10;
         }
-        
+
         .close-panel:hover {
             background: #5568d3;
         }
-        
+
+        /* 天气样式 */
+        .weather-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, #e0f7fa 0%, #e8eaf6 100%);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .weather-icon {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .weather-details {
+            flex: 1;
+        }
+
+        .weather-desc {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .weather-temp {
+            font-size: 13px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .weather-extra {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .weather-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            color: #555;
+            background: #e8f4fd;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+
+        .weather-loading {
+            color: #aaa;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* 总览子页面样式 */
+        .overview-location-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .overview-day-card {
+            padding: 10px 14px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s ease;
+        }
+
+        .overview-day-card:hover {
+            background: #e3f2fd;
+            transform: translateX(4px);
+        }
+
+        .overview-day-card-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .overview-day-card-spots {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .overview-day-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .view-day-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .view-day-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 带标签的Marker */
+        .labeled-marker {
+            position: relative;
+        }
+
+        .labeled-marker .marker-dot {
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .labeled-marker:hover .marker-dot {
+            transform: scale(1.3);
+        }
+
+        .labeled-marker .marker-label {
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+            pointer-events: none;
+        }
+
+        /* 星级景点脉冲动画 */
+        @keyframes pulse {
+            0% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 215, 0, 0.5); }
+            70% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 12px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        .marker-pulse .marker-dot {
+            animation: pulse 2s infinite;
+        }
+
         /* 路线动画 */
         @keyframes dash {
             to {
                 stroke-dashoffset: -20;
             }
         }
-        
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: 280px;
             }
-            
+
             #map {
                 height: calc(100vh - 380px);
             }
-            
+
             .info-panel {
                 left: 10px;
                 right: 10px;
@@ -347,7 +526,7 @@
         <h1>🇮🇸 Xinyì & Yuting的冰岛8天7夜详细行程地图</h1>
         <p>2026年2月19日-26日 | 伦敦往返 | 预算¥17,000-19,000</p>
     </div>
-    
+
     <div class="container">
         <div id="map">
             <div id="infoPanel" class="info-panel">
@@ -355,7 +534,7 @@
                 <div id="infoPanelContent"></div>
             </div>
         </div>
-        
+
         <div class="sidebar">
             <div class="day-section" data-day="0">
                 <div class="day-title">
@@ -369,7 +548,7 @@
                     <div class="stat-item">📏 总里程：约1,800公里</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="1">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -384,7 +563,7 @@
                     <div class="stat-item">🚌 交通45分钟</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="2">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -399,7 +578,7 @@
                     <div class="stat-item">🛒 超市采购</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="3">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -415,7 +594,7 @@
                     <div class="stat-item">🌌 极光</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="4">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -431,7 +610,7 @@
                     <div class="stat-item">🌌 极光</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="5">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -447,7 +626,7 @@
                     <div class="stat-item">⏰ 20:00返回</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="6">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -463,7 +642,7 @@
                     <div class="stat-item">🗣️ 中文导游</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="7">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -479,7 +658,7 @@
                     <div class="stat-item">♨️ 温泉2.5小时</div>
                 </div>
             </div>
-            
+
             <div class="day-section" data-day="8">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -494,7 +673,7 @@
                     <div class="stat-item">✈️ 飞行3h10m</div>
                 </div>
             </div>
-            
+
             <div class="legend">
                 <div class="legend-title">🗺️ 图例说明</div>
                 <div class="legend-item">
@@ -527,22 +706,24 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 初始化地图
+        // 初始化地图 - 使用CartoDB Voyager底图（更现代美观）
         const map = L.map('map', {
             center: [64.9631, -19.0208],
             zoom: 7,
             minZoom: 6,
-            maxZoom: 13
+            maxZoom: 13,
+            zoomAnimation: true
         });
-        
-        // 添加地图图层
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
         }).addTo(map);
-        
+
         // 定义所有位置
         const locations = {
             reykjavik: [64.1466, -21.9426],
@@ -569,33 +750,196 @@
             fagradalsfjall: [63.8833, -22.2667],
             blue_lagoon: [63.8804, -22.4495]
         };
-        
-        // 自定义图标
+
+        // 地点到日期的映射
+        const locationDayMap = {
+            reykjavik: { name: '雷克雅未克', days: [1, 2, 5, 6, 7, 8], type: 'hotel' },
+            keflavik_airport: { name: '凯夫拉维克机场', days: [1, 8], type: 'attraction' },
+            thingvellir: { name: '辛格韦德利国家公园', days: [3], type: 'attraction' },
+            bruarfoss: { name: '布鲁阿尔瀑布', days: [3], type: 'attraction' },
+            geysir: { name: '间歇泉区', days: [3], type: 'attraction' },
+            gullfoss: { name: '黄金瀑布', days: [3], type: 'star' },
+            seljalandsfoss: { name: '塞里雅兰瀑布', days: [3], type: 'star' },
+            hotel_dranghlid: { name: 'Hotel Dranghlid', days: [3, 4], type: 'hotel' },
+            skogafoss: { name: '斯科加瀑布', days: [4], type: 'attraction' },
+            falljokull: { name: 'Falljokull冰川', days: [4], type: 'star' },
+            hrifunes: { name: 'Hrifunes旅馆', days: [4, 5], type: 'hotel' },
+            jokulsarlon: { name: '杰古沙龙冰河湖', days: [5], type: 'star' },
+            diamond_beach: { name: '钻石海滩', days: [5], type: 'attraction' },
+            ice_cave: { name: '蓝冰洞', days: [5], type: 'star' },
+            reynisfjara: { name: '雷尼斯黑沙滩', days: [5], type: 'attraction' },
+            ytri_tunga: { name: 'Ytri-Tunga海滩', days: [6], type: 'attraction' },
+            budir: { name: 'Budir黑教堂', days: [6], type: 'attraction' },
+            arnarstapi: { name: 'Arnarstapi渔村', days: [6], type: 'attraction' },
+            djupalonssandur: { name: 'Djupalonssandur', days: [6], type: 'attraction' },
+            londrangar: { name: 'Londrangar岩柱', days: [6], type: 'attraction' },
+            kirkjufell: { name: '教会山', days: [6], type: 'star' },
+            fagradalsfjall: { name: '火山徒步', days: [7], type: 'star' },
+            blue_lagoon: { name: '蓝湖温泉', days: [7], type: 'star' }
+        };
+
+        // 行程日期映射（用于天气API）
+        const tripDates = {
+            1: '2026-02-19', 2: '2026-02-20', 3: '2026-02-21', 4: '2026-02-22',
+            5: '2026-02-23', 6: '2026-02-24', 7: '2026-02-25', 8: '2026-02-26'
+        };
+
+        // WMO天气代码映射
+        const weatherCodeMap = {
+            0: { desc: '晴天', icon: '☀️' },
+            1: { desc: '大部分晴', icon: '🌤️' },
+            2: { desc: '多云', icon: '⛅' },
+            3: { desc: '阴天', icon: '☁️' },
+            45: { desc: '有雾', icon: '🌫️' },
+            48: { desc: '雾凇', icon: '🌫️' },
+            51: { desc: '小毛雨', icon: '🌦️' },
+            53: { desc: '中毛雨', icon: '🌦️' },
+            55: { desc: '大毛雨', icon: '🌧️' },
+            56: { desc: '冻毛雨', icon: '🌧️' },
+            57: { desc: '重冻毛雨', icon: '🌧️' },
+            61: { desc: '小雨', icon: '🌧️' },
+            63: { desc: '中雨', icon: '🌧️' },
+            65: { desc: '大雨', icon: '🌧️' },
+            66: { desc: '冻雨', icon: '🌧️' },
+            67: { desc: '重冻雨', icon: '🌧️' },
+            71: { desc: '小雪', icon: '🌨️' },
+            73: { desc: '中雪', icon: '🌨️' },
+            75: { desc: '大雪', icon: '❄️' },
+            77: { desc: '雪粒', icon: '🌨️' },
+            80: { desc: '阵雨', icon: '🌧️' },
+            81: { desc: '中阵雨', icon: '🌧️' },
+            82: { desc: '暴雨', icon: '🌧️' },
+            85: { desc: '小阵雪', icon: '🌨️' },
+            86: { desc: '大阵雪', icon: '❄️' },
+            95: { desc: '雷暴', icon: '⛈️' },
+            96: { desc: '雷暴+冰雹', icon: '⛈️' },
+            99: { desc: '雷暴+大冰雹', icon: '⛈️' }
+        };
+
+        // 总览路线对应日期
+        const routeDayMap = [
+            { day: 3, label: 'Day 3: 黄金圈', color: '#FF6B6B' },
+            { day: 4, label: 'Day 4-5: 南海岸', color: '#4ECDC4' },
+            { day: 6, label: 'Day 6: 斯奈山半岛', color: '#95E1D3' },
+            { day: 7, label: 'Day 7: 火山+蓝湖', color: '#F38181' }
+        ];
+
+        // 创建带标签的图标
+        function createLabeledIcon(type, label, showLabel) {
+            const colors = { hotel: '#667eea', attraction: '#FFA500', star: '#FFD700' };
+            const sizes = { hotel: 24, attraction: 18, star: 22 };
+            const size = sizes[type];
+            const color = colors[type];
+            const pulseClass = type === 'star' ? 'marker-pulse' : '';
+            const starEmoji = type === 'star' ? '⭐' : '';
+            const labelHTML = showLabel ? `<div class="marker-label">${label}</div>` : '';
+
+            return L.divIcon({
+                className: `labeled-marker ${pulseClass}`,
+                html: `<div class="marker-dot" style="background:${color};width:${size}px;height:${size}px;font-size:11px;">${starEmoji}</div>${labelHTML}`,
+                iconSize: [size, size + (showLabel ? 18 : 0)],
+                iconAnchor: [size / 2, size / 2]
+            });
+        }
+
+        // 原始简单图标（用于每日视图，保持与popup兼容）
         const hotelIcon = L.divIcon({
-            className: 'custom-icon',
-            html: '<div style="background: #667eea; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+            className: 'labeled-marker',
+            html: '<div class="marker-dot" style="background: #667eea; width: 24px; height: 24px;"></div>',
             iconSize: [24, 24],
             iconAnchor: [12, 12]
         });
-        
+
         const attractionIcon = L.divIcon({
-            className: 'custom-icon',
-            html: '<div style="background: #FFA500; width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+            className: 'labeled-marker',
+            html: '<div class="marker-dot" style="background: #FFA500; width: 18px; height: 18px;"></div>',
             iconSize: [18, 18],
             iconAnchor: [9, 9]
         });
-        
+
         const starIcon = L.divIcon({
-            className: 'custom-icon',
-            html: '<div style="background: #FFD700; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 12px;">⭐</div>',
-            iconSize: [20, 20],
-            iconAnchor: [10, 10]
+            className: 'labeled-marker marker-pulse',
+            html: '<div class="marker-dot" style="background: #FFD700; width: 22px; height: 22px; font-size: 11px;">⭐</div>',
+            iconSize: [22, 22],
+            iconAnchor: [11, 11]
         });
-        
+
         // 创建图层组
         let currentLayers = L.layerGroup().addTo(map);
-        
-        // 详细行程信息
+        let currentDay = null;
+
+        // ==================== 天气系统 ====================
+        let weatherCache = null;
+        let weatherFetchTime = null;
+
+        async function fetchWeather() {
+            if (weatherCache && weatherFetchTime && (Date.now() - weatherFetchTime < 30 * 60 * 1000)) {
+                return weatherCache;
+            }
+            try {
+                const resp = await fetch(
+                    'https://api.open-meteo.com/v1/forecast?latitude=64.1466&longitude=-21.9426' +
+                    '&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max,precipitation_sum' +
+                    '&timezone=Atlantic/Reykjavik&start_date=2026-02-19&end_date=2026-02-26'
+                );
+                if (!resp.ok) throw new Error('Weather API error');
+                const data = await resp.json();
+                weatherCache = data;
+                weatherFetchTime = Date.now();
+                return data;
+            } catch (e) {
+                console.warn('天气数据获取失败:', e);
+                return null;
+            }
+        }
+
+        function getWeatherForDay(weatherData, dayNum) {
+            if (!weatherData || !weatherData.daily) return null;
+            const dateStr = tripDates[dayNum];
+            if (!dateStr) return null;
+            const idx = weatherData.daily.time.indexOf(dateStr);
+            if (idx === -1) return null;
+            const code = weatherData.daily.weathercode[idx];
+            const info = weatherCodeMap[code] || { desc: '未知', icon: '❓' };
+            return {
+                icon: info.icon,
+                desc: info.desc,
+                tempMax: Math.round(weatherData.daily.temperature_2m_max[idx]),
+                tempMin: Math.round(weatherData.daily.temperature_2m_min[idx]),
+                wind: Math.round(weatherData.daily.windspeed_10m_max[idx]),
+                precip: weatherData.daily.precipitation_sum[idx]
+            };
+        }
+
+        function buildWeatherHTML(weather) {
+            if (!weather) return '<div class="weather-loading">天气预报将在出发前两周更新</div>';
+            return `<div class="weather-section">
+                <div class="weather-icon">${weather.icon}</div>
+                <div class="weather-details">
+                    <div class="weather-desc">${weather.desc}</div>
+                    <div class="weather-temp">${weather.tempMin}°C ~ ${weather.tempMax}°C</div>
+                    <div class="weather-extra">风速 ${weather.wind}km/h | 降水 ${weather.precip}mm</div>
+                </div>
+            </div>`;
+        }
+
+        async function updateSidebarWeather() {
+            const data = await fetchWeather();
+            if (!data || !data.daily) return;
+            for (let day = 1; day <= 8; day++) {
+                const w = getWeatherForDay(data, day);
+                if (!w) continue;
+                const section = document.querySelector(`[data-day="${day}"] .day-stats`);
+                if (section && !section.querySelector('.weather-badge')) {
+                    const badge = document.createElement('div');
+                    badge.className = 'stat-item';
+                    badge.innerHTML = `<span class="weather-badge">${w.icon} ${w.tempMin}~${w.tempMax}°C</span>`;
+                    section.appendChild(badge);
+                }
+            }
+        }
+
+        // ==================== 详细行程信息 ====================
         const dayDetails = {
             1: {
                 title: "Day 1: 深夜抵达",
@@ -847,35 +1191,48 @@
                 ]
             }
         };
-        
-        // 显示信息面板
-        function showInfoPanel(day) {
+
+        // ==================== 信息面板 ====================
+        async function showInfoPanel(day) {
             const details = dayDetails[day];
             if (!details) return;
-            
-            let scheduleHTML = details.schedule.map(item => 
+
+            // 先显示面板（天气部分用占位符）
+            renderInfoPanel(details, day, null);
+            document.getElementById('infoPanel').classList.add('active');
+
+            // 异步加载天气
+            const weatherData = await fetchWeather();
+            const weather = getWeatherForDay(weatherData, day);
+            renderInfoPanel(details, day, weather);
+        }
+
+        function renderInfoPanel(details, day, weather) {
+            let weatherHTML = weather !== undefined ? buildWeatherHTML(weather) : '';
+
+            let scheduleHTML = details.schedule.map(item =>
                 `<div class="timeline-item">
                     <div class="timeline-time">${item.time}</div>
                     <div class="timeline-content">${item.activity}</div>
                 </div>`
             ).join('');
-            
-            let highlightsHTML = details.highlights ? 
+
+            let highlightsHTML = details.highlights ?
                 `<div class="info-panel-section">
                     <div class="info-panel-section-title">✨ 行程亮点</div>
                     <ul class="info-panel-list">
                         ${details.highlights.map(h => `<li>${h}</li>`).join('')}
                     </ul>
                 </div>` : '';
-            
-            let tipsHTML = details.tips ? 
+
+            let tipsHTML = details.tips ?
                 `<div class="info-panel-section">
                     <div class="info-panel-section-title">💡 注意事项</div>
                     <ul class="info-panel-list">
                         ${details.tips.map(t => `<li>${t}</li>`).join('')}
                     </ul>
                 </div>` : '';
-            
+
             let extraInfo = '';
             if (details.distance) extraInfo += `<p><strong>📏 里程：</strong>${details.distance}</p>`;
             if (details.accommodation) extraInfo += `<p><strong>🏨 住宿：</strong>${details.accommodation}</p>`;
@@ -883,10 +1240,11 @@
             if (details.intensity) extraInfo += `<p><strong>💪 强度：</strong>${details.intensity}</p>`;
             if (details.tour) extraInfo += `<p><strong>👥 旅行团：</strong>${details.tour}</p>`;
             if (details.price) extraInfo += `<p><strong>💰 价格：</strong>${details.price}</p>`;
-            
+
             document.getElementById('infoPanelContent').innerHTML = `
                 <div class="info-panel-header">${details.title}</div>
                 <div class="info-panel-content">
+                    ${weatherHTML}
                     <div class="info-panel-section">
                         <div class="info-panel-section-title">📅 ${details.date}</div>
                         <p>${details.description}</p>
@@ -900,15 +1258,67 @@
                     ${tipsHTML}
                 </div>
             `;
-            
-            document.getElementById('infoPanel').classList.add('active');
         }
-        
+
         function closeInfoPanel() {
             document.getElementById('infoPanel').classList.remove('active');
         }
-        
-        // 定义每日行程（包含路线和标记）
+
+        // ==================== 总览交互 ====================
+        function getDayLocations(dayNum) {
+            const locs = [];
+            Object.entries(locationDayMap).forEach(([key, info]) => {
+                if (info.days.includes(dayNum)) {
+                    locs.push(info.name);
+                }
+            });
+            return locs;
+        }
+
+        function showOverviewLocationPanel(locationKey, info) {
+            let html = `<div class="overview-location-header">📍 ${info.name}</div><div class="info-panel-content">`;
+
+            if (info.days.length === 1) {
+                const dayNum = info.days[0];
+                const detail = dayDetails[dayNum];
+                const dayLocs = getDayLocations(dayNum);
+                html += `
+                    <div style="margin-bottom:10px;">
+                        <span class="overview-day-badge">Day ${dayNum}</span>
+                        <strong>${detail.title.replace(/Day \d+: /, '')}</strong>
+                    </div>
+                    <p style="margin-bottom:10px;color:#666;">${detail.description}</p>
+                    <div class="info-panel-section">
+                        <div class="info-panel-section-title">📌 当天全部景点</div>
+                        <ul class="info-panel-list">
+                            ${dayLocs.map(name => `<li${name === info.name ? ' style="color:#667eea;font-weight:bold;"' : ''}>${name}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <button class="view-day-btn" onclick="showDay(${dayNum})">查看 Day ${dayNum} 详细行程 →</button>
+                `;
+            } else {
+                html += `<p style="margin-bottom:12px;color:#666;">该地点出现在以下日期的行程中：</p>`;
+                info.days.forEach(dayNum => {
+                    const detail = dayDetails[dayNum];
+                    const dayLocs = getDayLocations(dayNum);
+                    html += `
+                        <div class="overview-day-card" onclick="showDay(${dayNum})">
+                            <div class="overview-day-card-title">
+                                <span class="overview-day-badge">Day ${dayNum}</span>
+                                ${detail.title.replace(/Day \d+: /, '')}
+                            </div>
+                            <div class="overview-day-card-spots">${dayLocs.join(' · ')}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += '</div>';
+            document.getElementById('infoPanelContent').innerHTML = html;
+            document.getElementById('infoPanel').classList.add('active');
+        }
+
+        // ==================== 每日行程 ====================
         const itineraries = {
             0: { // 总览
                 routes: [
@@ -1012,54 +1422,125 @@
                 onShow: () => showInfoPanel(8)
             }
         };
-        
-        // 显示特定天数的路线
+
+        // ==================== 核心显示逻辑 ====================
         function showDay(day) {
             currentLayers.clearLayers();
-            
+            currentDay = day;
+
             const itinerary = itineraries[day];
-            
-            // 绘制路线
-            itinerary.routes.forEach(route => {
+
+            // 绘制路线（带发光效果）
+            itinerary.routes.forEach((route, idx) => {
+                // 发光底层
+                const glow = L.polyline(route.coords, {
+                    color: route.color,
+                    weight: (route.weight || 3) + 6,
+                    opacity: 0.15,
+                    dashArray: route.dash || null,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                });
+                currentLayers.addLayer(glow);
+
+                // 主线
                 const polyline = L.polyline(route.coords, {
                     color: route.color,
-                    weight: route.weight,
-                    opacity: 0.8,
-                    dashArray: route.dash || null
+                    weight: route.weight || 3,
+                    opacity: 0.85,
+                    dashArray: route.dash || null,
+                    lineCap: 'round',
+                    lineJoin: 'round'
                 });
                 currentLayers.addLayer(polyline);
+
+                // 总览模式：路线可点击+tooltip
+                if (day === 0 && routeDayMap[idx]) {
+                    const info = routeDayMap[idx];
+                    polyline.bindTooltip(info.label, {
+                        sticky: true,
+                        className: 'route-tooltip'
+                    });
+                    polyline.on('click', () => showDay(info.day));
+                    polyline.on('mouseover', function() {
+                        this.setStyle({ weight: 6, opacity: 1 });
+                        glow.setStyle({ weight: 12, opacity: 0.25 });
+                    });
+                    polyline.on('mouseout', function() {
+                        this.setStyle({ weight: route.weight || 3, opacity: 0.85 });
+                        glow.setStyle({ weight: (route.weight || 3) + 6, opacity: 0.15 });
+                    });
+                }
             });
-            
-            // 添加标记
-            itinerary.markers.forEach(marker => {
-                const m = L.marker(marker.pos, {icon: marker.icon})
-                    .bindPopup(marker.popup, {maxWidth: 300});
-                currentLayers.addLayer(m);
-            });
-            
-            // 自动调整视图
+
+            // 总览模式：添加所有地点标记
+            if (day === 0) {
+                const showLabels = map.getZoom() >= 8;
+                Object.entries(locationDayMap).forEach(([key, info]) => {
+                    const icon = createLabeledIcon(info.type, info.name, showLabels);
+                    const marker = L.marker(locations[key], { icon: icon });
+                    marker.on('click', () => showOverviewLocationPanel(key, info));
+                    marker.bindTooltip(info.name, { direction: 'top', offset: [0, -12] });
+                    currentLayers.addLayer(marker);
+                });
+            } else {
+                // 每日视图：添加标记（保持原有popup）
+                itinerary.markers.forEach(marker => {
+                    const m = L.marker(marker.pos, {icon: marker.icon})
+                        .bindPopup(marker.popup, {maxWidth: 300});
+                    currentLayers.addLayer(m);
+                });
+            }
+
+            // 平滑过渡到视图范围
             if (itinerary.routes.length > 0) {
                 const allCoords = itinerary.routes.flatMap(r => r.coords);
+                if (day === 0) {
+                    // 总览也包含所有marker坐标
+                    Object.keys(locationDayMap).forEach(key => {
+                        allCoords.push(locations[key]);
+                    });
+                }
                 if (allCoords.length > 0) {
-                    map.fitBounds(L.latLngBounds(allCoords), {padding: [50, 50]});
+                    map.flyToBounds(L.latLngBounds(allCoords), {padding: [50, 50], duration: 1.2});
                 }
             } else if (itinerary.markers.length > 0) {
                 const markerCoords = itinerary.markers.map(m => m.pos);
-                map.fitBounds(L.latLngBounds(markerCoords), {padding: [50, 50]});
+                map.flyToBounds(L.latLngBounds(markerCoords), {padding: [50, 50], duration: 1.2});
             }
-            
+
             // 更新侧边栏
             document.querySelectorAll('.day-section').forEach(section => {
                 section.classList.remove('active');
             });
             document.querySelector(`[data-day="${day}"]`).classList.add('active');
-            
+
             // 显示信息面板
             if (itinerary.onShow) {
                 itinerary.onShow();
             }
         }
-        
+
+        // 缩放时更新总览标签显示
+        map.on('zoomend', function() {
+            if (currentDay === 0) {
+                const showLabels = map.getZoom() >= 8;
+                currentLayers.eachLayer(layer => {
+                    if (layer instanceof L.Marker) {
+                        const latlng = layer.getLatLng();
+                        // 找到对应的location key
+                        const key = Object.keys(locations).find(k =>
+                            locations[k][0] === latlng.lat && locations[k][1] === latlng.lng
+                        );
+                        if (key && locationDayMap[key]) {
+                            const info = locationDayMap[key];
+                            layer.setIcon(createLabeledIcon(info.type, info.name, showLabels));
+                        }
+                    }
+                });
+            }
+        });
+
         // 侧边栏点击事件
         document.querySelectorAll('.day-section').forEach(section => {
             section.addEventListener('click', function() {
@@ -1067,9 +1548,12 @@
                 showDay(day);
             });
         });
-        
+
         // 默认显示Day 3（黄金圈）
         showDay(3);
+
+        // 页面加载后获取天气
+        updateSidebarWeather();
     </script>
 </body>
 </html>
