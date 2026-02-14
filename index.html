@@ -480,8 +480,8 @@
             white-space: nowrap;
             font-size: 11px;
             font-weight: 700;
-            color: #fff;
-            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.8);
+            color: #222;
+            text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white;
             pointer-events: none;
             letter-spacing: 0.3px;
         }
@@ -497,19 +497,19 @@
             100% { box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 0 rgba(255,255,255,0); }
         }
 
-        /* Leaflet tooltip on dark map */
+        /* Leaflet tooltip */
         .leaflet-tooltip {
-            background: rgba(20,20,30,0.9);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.15);
             border-radius: 6px;
             padding: 6px 10px;
             font-size: 12px;
             font-weight: 600;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
         }
         .leaflet-tooltip-top:before {
-            border-top-color: rgba(20,20,30,0.9);
+            border-top-color: rgba(255,255,255,0.95);
         }
 
         /* 路线动画 */
@@ -745,16 +745,10 @@
             maxBoundsViscosity: 0.8
         });
 
-        // 卫星影像底图
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+        // Esri地形图底图（清晰的陆地/海洋边界 + 地形细节）
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri, HERE, Garmin, USGS',
             maxZoom: 18
-        }).addTo(map);
-
-        // 地名标签覆盖层
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 18,
-            opacity: 0.7
         }).addTo(map);
 
         // 定义所有位置
