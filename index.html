@@ -734,12 +734,15 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // 初始化地图 - Esri卫星底图
+        const icelandBounds = L.latLngBounds([63.2, -24.8], [65.2, -15.5]);
         const map = L.map('map', {
-            center: [64.5, -19.0],
+            center: [64.2, -19.5],
             zoom: 7,
-            minZoom: 6,
+            minZoom: 7,
             maxZoom: 15,
-            zoomAnimation: true
+            zoomAnimation: true,
+            maxBounds: icelandBounds.pad(0.1),
+            maxBoundsViscosity: 0.8
         });
 
         // 卫星影像底图
@@ -1550,8 +1553,8 @@
                 });
             }
 
-            // 平滑过渡到视图范围（更紧凑的padding）
-            const padding = day === 0 ? [40, 40] : [60, 60];
+            // 平滑过渡到视图范围
+            const padding = day === 0 ? [30, 30] : [50, 50];
             if (itinerary.routes.length > 0) {
                 const allCoords = itinerary.routes.flatMap(r => r.coords);
                 if (day === 0) {
@@ -1560,11 +1563,11 @@
                     });
                 }
                 if (allCoords.length > 0) {
-                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: day === 0 ? 7 : 10});
+                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: day === 0 ? 8 : 11});
                 }
             } else if (itinerary.markers.length > 0) {
                 const markerCoords = itinerary.markers.map(m => m.pos);
-                map.flyToBounds(L.latLngBounds(markerCoords), {padding: padding, duration: 1.2});
+                map.flyToBounds(L.latLngBounds(markerCoords), {padding: padding, duration: 1.2, maxZoom: 11});
             }
 
             // 更新侧边栏
