@@ -732,14 +732,18 @@
             maxBoundsViscosity: 0.8
         });
 
-        // Esri地形图底图（清晰的陆地/海洋边界 + 地形细节）
         // 卫星底图
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; Esri, Maxar, Earthstar Geographics',
             maxZoom: 18
         }).addTo(map);
-        // 地名标签叠加层
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        // 道路叠加层（让陆地边界更清晰）
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 18,
+            pane: 'overlayPane'
+        }).addTo(map);
+        // 地名 + 边界叠加层
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Reference_Overlay/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 18,
             pane: 'overlayPane'
         }).addTo(map);
