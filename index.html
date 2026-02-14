@@ -447,47 +447,69 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
-        /* 带标签的Marker */
-        .labeled-marker {
+        /* 编号标记样式 */
+        .numbered-marker {
             position: relative;
+            cursor: pointer;
         }
 
-        .labeled-marker .marker-dot {
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
+        .numbered-marker .marker-circle {
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            font-weight: bold;
+            color: white;
+            transition: transform 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
-        .labeled-marker:hover .marker-dot {
-            transform: scale(1.3);
+        .numbered-marker:hover .marker-circle {
+            transform: scale(1.25);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.6);
         }
 
-        .labeled-marker .marker-label {
+        .numbered-marker .marker-name {
             position: absolute;
-            bottom: -16px;
+            top: 100%;
             left: 50%;
             transform: translateX(-50%);
+            margin-top: 2px;
             white-space: nowrap;
-            font-size: 10px;
-            font-weight: bold;
-            color: #333;
-            text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.8);
             pointer-events: none;
+            letter-spacing: 0.3px;
         }
 
-        /* 星级景点脉冲动画 */
-        @keyframes pulse {
-            0% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 215, 0, 0.5); }
-            70% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 12px rgba(255, 215, 0, 0); }
-            100% { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0 rgba(255, 215, 0, 0); }
+        /* 星级标记特效 */
+        .numbered-marker.star-marker .marker-circle {
+            animation: starPulse 2.5s infinite;
         }
 
-        .marker-pulse .marker-dot {
-            animation: pulse 2s infinite;
+        @keyframes starPulse {
+            0% { box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 0 rgba(255,255,255,0.4); }
+            70% { box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 10px rgba(255,255,255,0); }
+            100% { box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 0 0 rgba(255,255,255,0); }
+        }
+
+        /* Leaflet tooltip on dark map */
+        .leaflet-tooltip {
+            background: rgba(20,20,30,0.9);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+        }
+        .leaflet-tooltip-top:before {
+            border-top-color: rgba(20,20,30,0.9);
         }
 
         /* 路线动画 */
@@ -677,31 +699,33 @@
             <div class="legend">
                 <div class="legend-title">🗺️ 图例说明</div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #FF6B6B;"></div>
+                    <div class="legend-color" style="background: #FF6B6B; height: 4px;"></div>
                     <span>Day 3: 黄金圈路线</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #4ECDC4;"></div>
+                    <div class="legend-color" style="background: #4ECDC4; height: 4px;"></div>
                     <span>Day 4-5: 南海岸路线</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #95E1D3;"></div>
+                    <div class="legend-color" style="background: #45B7AF; height: 4px;"></div>
                     <span>Day 6: 斯奈山半岛</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #F38181;"></div>
+                    <div class="legend-color" style="background: #F38181; height: 4px;"></div>
                     <span>Day 7: 火山+蓝湖</span>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-marker" style="background: #667eea;"></div>
-                    <span>住宿地点</span>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                    <div class="legend-item">
+                        <div class="legend-marker" style="background: #FF6B6B; color: white; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: bold;">3</div>
+                        <span>编号 = 所属日期</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-marker" style="background: #FFD700; color: white; display: flex; align-items: center; justify-content: center; font-size: 9px;">★</div>
+                        <span>★ = 核心景点</span>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-marker" style="background: #FFA500;"></div>
-                    <span>景点</span>
-                </div>
-                <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd; font-size: 11px; color: #666;">
-                    💡 提示：点击景点标记查看详细信息
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0; font-size: 11px; color: #666;">
+                    💡 点击标记查看详情，点击路线跳转日期
                 </div>
             </div>
         </div>
@@ -709,19 +733,25 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 初始化地图 - 使用CartoDB Voyager底图（更现代美观）
+        // 初始化地图 - Esri卫星底图
         const map = L.map('map', {
-            center: [64.9631, -19.0208],
+            center: [64.5, -19.0],
             zoom: 7,
             minZoom: 6,
-            maxZoom: 13,
+            maxZoom: 15,
             zoomAnimation: true
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
+        // 卫星影像底图
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+            maxZoom: 18
+        }).addTo(map);
+
+        // 地名标签覆盖层
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 18,
+            opacity: 0.7
         }).addTo(map);
 
         // 定义所有位置
@@ -816,53 +846,66 @@
             99: { desc: '雷暴+大冰雹', icon: '⛈️' }
         };
 
+        // 每日颜色方案（Day 1-8各一色）
+        const dayColors = {
+            1: '#667eea', // 紫蓝 - 抵达
+            2: '#667eea', // 紫蓝 - 市区
+            3: '#FF6B6B', // 红色 - 黄金圈
+            4: '#4ECDC4', // 青色 - 南海岸
+            5: '#4ECDC4', // 青色 - 冰河湖
+            6: '#45B7AF', // 深青 - 斯奈山
+            7: '#F38181', // 粉红 - 火山蓝湖
+            8: '#667eea'  // 紫蓝 - 离境
+        };
+
         // 总览路线对应日期
         const routeDayMap = [
             { day: 3, label: 'Day 3: 黄金圈', color: '#FF6B6B' },
             { day: 4, label: 'Day 4-5: 南海岸', color: '#4ECDC4' },
-            { day: 6, label: 'Day 6: 斯奈山半岛', color: '#95E1D3' },
+            { day: 6, label: 'Day 6: 斯奈山半岛', color: '#45B7AF' },
             { day: 7, label: 'Day 7: 火山+蓝湖', color: '#F38181' }
         ];
 
-        // 创建带标签的图标
-        function createLabeledIcon(type, label, showLabel) {
-            const colors = { hotel: '#667eea', attraction: '#FFA500', star: '#FFD700' };
-            const sizes = { hotel: 24, attraction: 18, star: 22 };
-            const size = sizes[type];
-            const color = colors[type];
-            const pulseClass = type === 'star' ? 'marker-pulse' : '';
-            const starEmoji = type === 'star' ? '⭐' : '';
-            const labelHTML = showLabel ? `<div class="marker-label">${label}</div>` : '';
+        // 创建编号图标（总览用）
+        function createNumberedIcon(dayNum, label, type, showLabel) {
+            const color = dayColors[dayNum] || '#667eea';
+            const isStar = type === 'star';
+            const size = isStar ? 32 : 28;
+            const fontSize = isStar ? 13 : 12;
+            const starClass = isStar ? 'star-marker' : '';
+            const displayText = isStar ? '★' : dayNum;
+            const nameHTML = showLabel ? `<div class="marker-name">${label}</div>` : '';
 
             return L.divIcon({
-                className: `labeled-marker ${pulseClass}`,
-                html: `<div class="marker-dot" style="background:${color};width:${size}px;height:${size}px;font-size:11px;">${starEmoji}</div>${labelHTML}`,
-                iconSize: [size, size + (showLabel ? 18 : 0)],
+                className: `numbered-marker ${starClass}`,
+                html: `<div class="marker-circle" style="background:${color};width:${size}px;height:${size}px;font-size:${fontSize}px;">${displayText}</div>${nameHTML}`,
+                iconSize: [size, size + (showLabel ? 16 : 0)],
                 iconAnchor: [size / 2, size / 2]
             });
         }
 
-        // 原始简单图标（用于每日视图，保持与popup兼容）
-        const hotelIcon = L.divIcon({
-            className: 'labeled-marker',
-            html: '<div class="marker-dot" style="background: #667eea; width: 24px; height: 24px;"></div>',
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
-        });
+        // 每日视图用的图标（带日期编号）
+        function createDayIcon(dayNum, type) {
+            const color = dayColors[dayNum] || '#667eea';
+            const isStar = type === 'star';
+            const isHotel = type === 'hotel';
+            const size = isStar ? 32 : isHotel ? 30 : 26;
+            const fontSize = isStar ? 13 : 12;
+            const starClass = isStar ? 'star-marker' : '';
+            const displayText = isStar ? '★' : isHotel ? '🏨' : dayNum;
 
-        const attractionIcon = L.divIcon({
-            className: 'labeled-marker',
-            html: '<div class="marker-dot" style="background: #FFA500; width: 18px; height: 18px;"></div>',
-            iconSize: [18, 18],
-            iconAnchor: [9, 9]
-        });
+            return L.divIcon({
+                className: `numbered-marker ${starClass}`,
+                html: `<div class="marker-circle" style="background:${color};width:${size}px;height:${size}px;font-size:${fontSize}px;">${displayText}</div>`,
+                iconSize: [size, size],
+                iconAnchor: [size / 2, size / 2]
+            });
+        }
 
-        const starIcon = L.divIcon({
-            className: 'labeled-marker marker-pulse',
-            html: '<div class="marker-dot" style="background: #FFD700; width: 22px; height: 22px; font-size: 11px;">⭐</div>',
-            iconSize: [22, 22],
-            iconAnchor: [11, 11]
-        });
+        // 兼容旧代码的图标引用
+        const hotelIcon = createDayIcon(3, 'hotel');
+        const attractionIcon = createDayIcon(3, 'attraction');
+        const starIcon = createDayIcon(3, 'star');
 
         // 创建图层组
         let currentLayers = L.layerGroup().addTo(map);
@@ -1322,10 +1365,10 @@
         const itineraries = {
             0: { // 总览
                 routes: [
-                    {coords: [locations.reykjavik, locations.thingvellir, locations.bruarfoss, locations.geysir, locations.gullfoss, locations.seljalandsfoss, locations.hotel_dranghlid], color: '#FF6B6B', weight: 3},
-                    {coords: [locations.hotel_dranghlid, locations.skogafoss, locations.falljokull, locations.hrifunes, locations.jokulsarlon, locations.diamond_beach, locations.reynisfjara, locations.reykjavik], color: '#4ECDC4', weight: 3},
-                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#95E1D3', weight: 3},
-                    {coords: [locations.reykjavik, locations.fagradalsfjall, locations.blue_lagoon, locations.reykjavik], color: '#F38181', weight: 3}
+                    {coords: [locations.reykjavik, locations.thingvellir, locations.bruarfoss, locations.geysir, locations.gullfoss, locations.seljalandsfoss, locations.hotel_dranghlid], color: '#FF6B6B', weight: 4},
+                    {coords: [locations.hotel_dranghlid, locations.skogafoss, locations.falljokull, locations.hrifunes, locations.jokulsarlon, locations.diamond_beach, locations.reynisfjara, locations.reykjavik], color: '#4ECDC4', weight: 4},
+                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#45B7AF', weight: 4},
+                    {coords: [locations.reykjavik, locations.fagradalsfjall, locations.blue_lagoon, locations.reykjavik], color: '#F38181', weight: 4}
                 ],
                 markers: [],
                 onShow: () => closeInfoPanel()
@@ -1387,7 +1430,7 @@
             },
             6: {
                 routes: [
-                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#95E1D3', weight: 4}
+                    {coords: [locations.reykjavik, locations.ytri_tunga, locations.budir, locations.arnarstapi, locations.djupalonssandur, locations.londrangar, locations.kirkjufell, locations.reykjavik], color: '#45B7AF', weight: 4}
                 ],
                 markers: [
                     {pos: locations.ytri_tunga, icon: attractionIcon, popup: '<div class="popup-header">🦭 Ytri-Tunga海滩</div><div class="popup-body"><p><strong>特色：</strong>野生海豹栖息地</p><p><strong>时间：</strong>11:00-11:45（45分钟）</p><p><strong>观察：</strong>远距离观看海豹</p><div class="popup-highlight">⚠️ 不要靠近打扰海豹</div></div>'},
@@ -1429,25 +1472,38 @@
             currentDay = day;
 
             const itinerary = itineraries[day];
+            const baseWeight = day === 0 ? 4 : 5;
 
-            // 绘制路线（带发光效果）
+            // 绘制路线（带发光效果，卫星底图上更粗更亮）
             itinerary.routes.forEach((route, idx) => {
-                // 发光底层
+                const w = route.weight || baseWeight;
+                // 外发光层
                 const glow = L.polyline(route.coords, {
                     color: route.color,
-                    weight: (route.weight || 3) + 6,
-                    opacity: 0.15,
+                    weight: w + 10,
+                    opacity: 0.2,
                     dashArray: route.dash || null,
                     lineCap: 'round',
                     lineJoin: 'round'
                 });
                 currentLayers.addLayer(glow);
 
+                // 白色描边层（增加对比度）
+                const outline = L.polyline(route.coords, {
+                    color: '#ffffff',
+                    weight: w + 3,
+                    opacity: 0.4,
+                    dashArray: route.dash || null,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                });
+                currentLayers.addLayer(outline);
+
                 // 主线
                 const polyline = L.polyline(route.coords, {
                     color: route.color,
-                    weight: route.weight || 3,
-                    opacity: 0.85,
+                    weight: w,
+                    opacity: 0.95,
                     dashArray: route.dash || null,
                     lineCap: 'round',
                     lineJoin: 'round'
@@ -1457,56 +1513,58 @@
                 // 总览模式：路线可点击+tooltip
                 if (day === 0 && routeDayMap[idx]) {
                     const info = routeDayMap[idx];
-                    polyline.bindTooltip(info.label, {
-                        sticky: true,
-                        className: 'route-tooltip'
-                    });
+                    polyline.bindTooltip(info.label, { sticky: true });
                     polyline.on('click', () => showDay(info.day));
                     polyline.on('mouseover', function() {
-                        this.setStyle({ weight: 6, opacity: 1 });
-                        glow.setStyle({ weight: 12, opacity: 0.25 });
+                        this.setStyle({ weight: w + 3, opacity: 1 });
+                        glow.setStyle({ weight: w + 16, opacity: 0.35 });
                     });
                     polyline.on('mouseout', function() {
-                        this.setStyle({ weight: route.weight || 3, opacity: 0.85 });
-                        glow.setStyle({ weight: (route.weight || 3) + 6, opacity: 0.15 });
+                        this.setStyle({ weight: w, opacity: 0.95 });
+                        glow.setStyle({ weight: w + 10, opacity: 0.2 });
                     });
                 }
             });
 
-            // 总览模式：添加所有地点标记
+            // 总览模式：添加编号+颜色分组标记
             if (day === 0) {
-                const showLabels = map.getZoom() >= 8;
+                const showLabels = map.getZoom() >= 9;
                 Object.entries(locationDayMap).forEach(([key, info]) => {
-                    const icon = createLabeledIcon(info.type, info.name, showLabels);
+                    const primaryDay = info.days[0];
+                    const icon = createNumberedIcon(primaryDay, info.name, info.type, showLabels);
                     const marker = L.marker(locations[key], { icon: icon });
                     marker.on('click', () => showOverviewLocationPanel(key, info));
-                    marker.bindTooltip(info.name, { direction: 'top', offset: [0, -12] });
+                    marker.bindTooltip(info.name, { direction: 'top', offset: [0, -16] });
                     currentLayers.addLayer(marker);
                 });
             } else {
-                // 每日视图：添加标记（保持原有popup）
-                itinerary.markers.forEach(marker => {
-                    const m = L.marker(marker.pos, {icon: marker.icon})
+                // 每日视图：编号标记 + popup
+                itinerary.markers.forEach((marker, idx) => {
+                    let type = 'attraction';
+                    if (marker.icon === hotelIcon) type = 'hotel';
+                    else if (marker.icon === starIcon) type = 'star';
+                    const icon = createDayIcon(day, type);
+                    const m = L.marker(marker.pos, { icon: icon })
                         .bindPopup(marker.popup, {maxWidth: 300});
                     currentLayers.addLayer(m);
                 });
             }
 
-            // 平滑过渡到视图范围
+            // 平滑过渡到视图范围（更紧凑的padding）
+            const padding = day === 0 ? [40, 40] : [60, 60];
             if (itinerary.routes.length > 0) {
                 const allCoords = itinerary.routes.flatMap(r => r.coords);
                 if (day === 0) {
-                    // 总览也包含所有marker坐标
                     Object.keys(locationDayMap).forEach(key => {
                         allCoords.push(locations[key]);
                     });
                 }
                 if (allCoords.length > 0) {
-                    map.flyToBounds(L.latLngBounds(allCoords), {padding: [50, 50], duration: 1.2});
+                    map.flyToBounds(L.latLngBounds(allCoords), {padding: padding, duration: 1.2, maxZoom: day === 0 ? 7 : 10});
                 }
             } else if (itinerary.markers.length > 0) {
                 const markerCoords = itinerary.markers.map(m => m.pos);
-                map.flyToBounds(L.latLngBounds(markerCoords), {padding: [50, 50], duration: 1.2});
+                map.flyToBounds(L.latLngBounds(markerCoords), {padding: padding, duration: 1.2});
             }
 
             // 更新侧边栏
@@ -1524,17 +1582,17 @@
         // 缩放时更新总览标签显示
         map.on('zoomend', function() {
             if (currentDay === 0) {
-                const showLabels = map.getZoom() >= 8;
+                const showLabels = map.getZoom() >= 9;
                 currentLayers.eachLayer(layer => {
                     if (layer instanceof L.Marker) {
                         const latlng = layer.getLatLng();
-                        // 找到对应的location key
                         const key = Object.keys(locations).find(k =>
                             locations[k][0] === latlng.lat && locations[k][1] === latlng.lng
                         );
                         if (key && locationDayMap[key]) {
                             const info = locationDayMap[key];
-                            layer.setIcon(createLabeledIcon(info.type, info.name, showLabels));
+                            const primaryDay = info.days[0];
+                            layer.setIcon(createNumberedIcon(primaryDay, info.name, info.type, showLabels));
                         }
                     }
                 });
