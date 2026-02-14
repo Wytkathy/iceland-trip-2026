@@ -146,34 +146,20 @@
 
         /* 地图上的信息面板 */
         .info-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: white;
+            position: relative;
+            background: #f0f4ff;
             padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            max-width: 380px;
-            max-height: 70vh;
-            overflow-y: auto;
-            z-index: 1000;
+            border-bottom: 2px solid #667eea;
             display: none;
-            cursor: grab;
-        }
-
-        .info-panel.dragging {
-            cursor: grabbing;
-            user-select: none;
-            opacity: 0.92;
         }
 
         .info-panel.active {
             display: block;
-            animation: slideUp 0.3s ease;
+            animation: slideDown 0.3s ease;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -541,12 +527,7 @@
                 height: calc(100vh - 380px);
             }
 
-            .info-panel {
-                left: 10px;
-                right: 10px;
-                bottom: 10px;
-                max-width: none;
-            }
+
         }
     </style>
 </head>
@@ -557,14 +538,13 @@
     </div>
 
     <div class="container">
-        <div id="map">
+        <div id="map"></div>
+
+        <div class="sidebar">
             <div id="infoPanel" class="info-panel">
                 <button class="close-panel" onclick="closeInfoPanel()">×</button>
                 <div id="infoPanelContent"></div>
             </div>
-        </div>
-
-        <div class="sidebar">
             <div class="day-section" data-day="0">
                 <div class="day-title">
                     <div class="day-title-left">
@@ -1247,6 +1227,7 @@
             // 先显示面板（天气部分用占位符）
             renderInfoPanel(details, day, null);
             document.getElementById('infoPanel').classList.add('active');
+            document.querySelector('.sidebar').scrollTop = 0;
 
             // 异步加载天气
             const weatherData = await fetchWeather();
@@ -1308,85 +1289,8 @@
         }
 
         function closeInfoPanel() {
-            const panel = document.getElementById('infoPanel');
-            panel.classList.remove('active');
-            // 重置位置
-            panel.style.left = '';
-            panel.style.top = '';
-            panel.style.bottom = '';
+            document.getElementById('infoPanel').classList.remove('active');
         }
-
-        // ==================== 面板拖动 ====================
-        (function() {
-            const panel = document.getElementById('infoPanel');
-            let isDragging = false, startX, startY, panelX, panelY;
-
-            panel.addEventListener('mousedown', function(e) {
-                // 不拦截按钮和链接的点击
-                if (e.target.closest('button, a, .view-day-btn, .overview-day-card')) return;
-                isDragging = true;
-                panel.classList.add('dragging');
-                const rect = panel.getBoundingClientRect();
-                const mapRect = panel.parentElement.getBoundingClientRect();
-                startX = e.clientX;
-                startY = e.clientY;
-                panelX = rect.left - mapRect.left;
-                panelY = rect.top - mapRect.top;
-                // 切换到 top/left 定位
-                panel.style.bottom = 'auto';
-                panel.style.left = panelX + 'px';
-                panel.style.top = panelY + 'px';
-                e.preventDefault();
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                if (!isDragging) return;
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-                panel.style.left = (panelX + dx) + 'px';
-                panel.style.top = (panelY + dy) + 'px';
-            });
-
-            document.addEventListener('mouseup', function() {
-                if (isDragging) {
-                    isDragging = false;
-                    panel.classList.remove('dragging');
-                }
-            });
-
-            // 触屏支持
-            panel.addEventListener('touchstart', function(e) {
-                if (e.target.closest('button, a, .view-day-btn, .overview-day-card')) return;
-                isDragging = true;
-                panel.classList.add('dragging');
-                const rect = panel.getBoundingClientRect();
-                const mapRect = panel.parentElement.getBoundingClientRect();
-                const touch = e.touches[0];
-                startX = touch.clientX;
-                startY = touch.clientY;
-                panelX = rect.left - mapRect.left;
-                panelY = rect.top - mapRect.top;
-                panel.style.bottom = 'auto';
-                panel.style.left = panelX + 'px';
-                panel.style.top = panelY + 'px';
-            }, {passive: true});
-
-            document.addEventListener('touchmove', function(e) {
-                if (!isDragging) return;
-                const touch = e.touches[0];
-                const dx = touch.clientX - startX;
-                const dy = touch.clientY - startY;
-                panel.style.left = (panelX + dx) + 'px';
-                panel.style.top = (panelY + dy) + 'px';
-            }, {passive: true});
-
-            document.addEventListener('touchend', function() {
-                if (isDragging) {
-                    isDragging = false;
-                    panel.classList.remove('dragging');
-                }
-            });
-        })();
 
         // ==================== 总览交互 ====================
         function getDayLocations(dayNum) {
@@ -1440,6 +1344,7 @@
             html += '</div>';
             document.getElementById('infoPanelContent').innerHTML = html;
             document.getElementById('infoPanel').classList.add('active');
+            document.querySelector('.sidebar').scrollTop = 0;
         }
 
         // ==================== 每日行程 ====================
