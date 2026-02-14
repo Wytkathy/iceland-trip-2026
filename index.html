@@ -746,29 +746,29 @@
 
         // 定义所有位置
         const locations = {
-            reykjavik: [64.1466, -21.9426],
+            reykjavik: [64.1355, -21.8954],
             keflavik_airport: [63.9850, -22.6056],
-            thingvellir: [64.2558, -21.1292],
-            bruarfoss: [64.2639, -20.5167],
-            geysir: [64.3107, -20.3014],
-            gullfoss: [64.3271, -20.1211],
-            seljalandsfoss: [63.6156, -19.9886],
-            hotel_dranghlid: [63.5333, -19.5167],
-            skogafoss: [63.5319, -19.5114],
-            falljokull: [63.9667, -16.8000],
+            thingvellir: [64.2558, -21.1300],
+            bruarfoss: [64.2643, -20.5157],
+            geysir: [64.3136, -20.3024],
+            gullfoss: [64.3223, -20.1193],
+            seljalandsfoss: [63.6156, -19.9885],
+            hotel_dranghlid: [63.5222, -19.5727],
+            skogafoss: [63.5321, -19.5114],
+            falljokull: [63.9764, -16.7700],
             hrifunes: [63.6412, -18.5081],
-            jokulsarlon: [64.0784, -16.2306],
-            diamond_beach: [64.0428, -16.1803],
-            ice_cave: [63.95, -16.9],
-            reynisfjara: [63.4028, -19.0456],
+            jokulsarlon: [64.0688, -16.2070],
+            diamond_beach: [64.0438, -16.1763],
+            ice_cave: [64.0486, -16.1796],
+            reynisfjara: [63.4065, -19.0705],
             ytri_tunga: [64.8029, -23.0805],
             budir: [64.8217, -23.3840],
-            arnarstapi: [64.7583, -23.6167],
-            djupalonssandur: [64.7458, -23.9361],
-            londrangar: [64.7333, -23.7833],
-            kirkjufell: [64.9439, -23.3125],
-            fagradalsfjall: [63.8833, -22.2667],
-            blue_lagoon: [63.8804, -22.4495]
+            arnarstapi: [64.7691, -23.6259],
+            djupalonssandur: [64.7493, -23.9122],
+            londrangar: [64.7324, -23.7848],
+            kirkjufell: [64.9417, -23.3069],
+            fagradalsfjall: [63.9268, -22.2497],
+            blue_lagoon: [63.8802, -22.4506]
         };
 
         // 地点到日期的映射
@@ -911,7 +911,7 @@
             }
             try {
                 const resp = await fetch(
-                    'https://api.open-meteo.com/v1/forecast?latitude=64.1466&longitude=-21.9426' +
+                    'https://api.open-meteo.com/v1/forecast?latitude=64.1355&longitude=-21.8954' +
                     '&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max,precipitation_sum' +
                     '&timezone=Atlantic/Reykjavik&start_date=2026-02-19&end_date=2026-02-26'
                 );
