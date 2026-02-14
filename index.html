@@ -473,8 +473,8 @@
             white-space: nowrap;
             font-size: 11px;
             font-weight: 700;
-            color: #222;
-            text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white;
+            color: #fff;
+            text-shadow: 0 0 4px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7), 1px 1px 2px rgba(0,0,0,0.9);
             pointer-events: none;
             letter-spacing: 0.3px;
         }
@@ -733,9 +733,15 @@
         });
 
         // Esri地形图底图（清晰的陆地/海洋边界 + 地形细节）
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; Esri, HERE, Garmin, USGS',
+        // 卫星底图
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri, Maxar, Earthstar Geographics',
             maxZoom: 18
+        }).addTo(map);
+        // 地名标签叠加层
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 18,
+            pane: 'overlayPane'
         }).addTo(map);
 
         // 定义所有位置
@@ -749,14 +755,14 @@
             seljalandsfoss: [63.6156, -19.9886],
             hotel_dranghlid: [63.5333, -19.5167],
             skogafoss: [63.5319, -19.5114],
-            falljokull: [64.0167, -16.4167],
-            hrifunes: [63.8333, -18.0833],
+            falljokull: [63.9667, -16.8000],
+            hrifunes: [63.6412, -18.5081],
             jokulsarlon: [64.0784, -16.2306],
             diamond_beach: [64.0428, -16.1803],
             ice_cave: [63.95, -16.9],
             reynisfjara: [63.4028, -19.0456],
-            ytri_tunga: [64.8611, -23.5000],
-            budir: [64.8194, -23.7889],
+            ytri_tunga: [64.8029, -23.0805],
+            budir: [64.8217, -23.3840],
             arnarstapi: [64.7583, -23.6167],
             djupalonssandur: [64.7458, -23.9361],
             londrangar: [64.7333, -23.7833],
