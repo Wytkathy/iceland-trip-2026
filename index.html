@@ -158,6 +158,13 @@
             overflow-y: auto;
             z-index: 1000;
             display: none;
+            cursor: grab;
+        }
+
+        .info-panel.dragging {
+            cursor: grabbing;
+            user-select: none;
+            opacity: 0.92;
         }
 
         .info-panel.active {
@@ -1301,8 +1308,85 @@
         }
 
         function closeInfoPanel() {
-            document.getElementById('infoPanel').classList.remove('active');
+            const panel = document.getElementById('infoPanel');
+            panel.classList.remove('active');
+            // 重置位置
+            panel.style.left = '';
+            panel.style.top = '';
+            panel.style.bottom = '';
         }
+
+        // ==================== 面板拖动 ====================
+        (function() {
+            const panel = document.getElementById('infoPanel');
+            let isDragging = false, startX, startY, panelX, panelY;
+
+            panel.addEventListener('mousedown', function(e) {
+                // 不拦截按钮和链接的点击
+                if (e.target.closest('button, a, .view-day-btn, .overview-day-card')) return;
+                isDragging = true;
+                panel.classList.add('dragging');
+                const rect = panel.getBoundingClientRect();
+                const mapRect = panel.parentElement.getBoundingClientRect();
+                startX = e.clientX;
+                startY = e.clientY;
+                panelX = rect.left - mapRect.left;
+                panelY = rect.top - mapRect.top;
+                // 切换到 top/left 定位
+                panel.style.bottom = 'auto';
+                panel.style.left = panelX + 'px';
+                panel.style.top = panelY + 'px';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                panel.style.left = (panelX + dx) + 'px';
+                panel.style.top = (panelY + dy) + 'px';
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    panel.classList.remove('dragging');
+                }
+            });
+
+            // 触屏支持
+            panel.addEventListener('touchstart', function(e) {
+                if (e.target.closest('button, a, .view-day-btn, .overview-day-card')) return;
+                isDragging = true;
+                panel.classList.add('dragging');
+                const rect = panel.getBoundingClientRect();
+                const mapRect = panel.parentElement.getBoundingClientRect();
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+                panelX = rect.left - mapRect.left;
+                panelY = rect.top - mapRect.top;
+                panel.style.bottom = 'auto';
+                panel.style.left = panelX + 'px';
+                panel.style.top = panelY + 'px';
+            }, {passive: true});
+
+            document.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                const touch = e.touches[0];
+                const dx = touch.clientX - startX;
+                const dy = touch.clientY - startY;
+                panel.style.left = (panelX + dx) + 'px';
+                panel.style.top = (panelY + dy) + 'px';
+            }, {passive: true});
+
+            document.addEventListener('touchend', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    panel.classList.remove('dragging');
+                }
+            });
+        })();
 
         // ==================== 总览交互 ====================
         function getDayLocations(dayNum) {
@@ -1600,8 +1684,8 @@
             });
         });
 
-        // 默认显示Day 3（黄金圈）
-        showDay(3);
+        // 默认显示行程总览
+        showDay(0);
 
         // 页面加载后获取天气
         updateSidebarWeather();
